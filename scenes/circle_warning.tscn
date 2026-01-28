@@ -1,0 +1,90 @@
+[gd_scene load_steps=8 format=3 uid="uid://bsuiardtyixtn"]
+
+[ext_resource type="Texture2D" uid="uid://cnpuxwlp1jsd3" path="res://sprites/HollowCircle.png" id="1_wv0x2"]
+[ext_resource type="Texture2D" uid="uid://b2ylru6nfjj31" path="res://sprites/Circle.png" id="2_nannj"]
+[ext_resource type="Script" uid="uid://spbaj33exp80" path="res://scripts/circle_warning.gd" id="2_shhl0"]
+
+[sub_resource type="Animation" id="Animation_nannj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.49803922]
+}
+
+[sub_resource type="Animation" id="Animation_shhl0"]
+resource_name = "fade_away"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.5, 0.0]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_wv0x2"]
+resource_name = "warn_appear"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0.0, 0.5, 0.0, 0.5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_shhl0"]
+_data = {
+&"RESET": SubResource("Animation_nannj"),
+&"fade_away": SubResource("Animation_shhl0"),
+&"warn_appear": SubResource("Animation_wv0x2")
+}
+
+[node name="CircleWarning" type="Sprite2D"]
+modulate = Color(1, 0, 0, 0.49803922)
+z_index = -6
+z_as_relative = false
+scale = Vector2(6.3, 6.3)
+texture = ExtResource("1_wv0x2")
+script = ExtResource("2_shhl0")
+
+[node name="Circle" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0.49803922)
+texture = ExtResource("2_nannj")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_shhl0")
+}

@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://dgs2gn5rx5i18"]
+
+[ext_resource type="StyleBox" uid="uid://crw5312ulr55d" path="res://resources/bossbar_background.tres" id="1_lh1de"]
+[ext_resource type="StyleBox" uid="uid://cx5upcxjp7jky" path="res://resources/bossbar_fill.tres" id="2_cm7a8"]
+[ext_resource type="Script" uid="uid://4hijlarskmx4" path="res://scripts/bossbar.gd" id="3_gpur3"]
+
+[node name="Bossbar" type="ProgressBar" groups=["bossbar"]]
+custom_minimum_size = Vector2(1024, 32)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -512.0
+offset_top = 64.0
+offset_right = 512.0
+offset_bottom = 96.0
+grow_horizontal = 2
+theme_override_styles/background = ExtResource("1_lh1de")
+theme_override_styles/fill = ExtResource("2_cm7a8")
+show_percentage = false
+script = ExtResource("3_gpur3")

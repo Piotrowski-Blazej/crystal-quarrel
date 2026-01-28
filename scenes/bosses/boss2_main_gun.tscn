@@ -1,0 +1,65 @@
+[gd_scene load_steps=8 format=3 uid="uid://lri8f1liwlm2"]
+
+[ext_resource type="Texture2D" uid="uid://24hsw0luxhoj" path="res://sprites/pentagon.png" id="1_a5ci3"]
+[ext_resource type="Texture2D" uid="uid://b2ylru6nfjj31" path="res://sprites/Circle.png" id="1_cxl1l"]
+[ext_resource type="Script" uid="uid://bgxhvyk3ejxbj" path="res://scripts/bosses/boss2/boss2_main_gun.gd" id="2_cxl1l"]
+[ext_resource type="AudioStream" uid="uid://bn15gao0ogu6" path="res://sounds/small_shot.wav" id="4_l2q4i"]
+
+[sub_resource type="Animation" id="Animation_cxl1l"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_a5ci3"]
+resource_name = "gun_recoil"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 1),
+"transitions": PackedFloat32Array(0.5, 2, 1),
+"update": 0,
+"values": [0.0, 32.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l2q4i"]
+_data = {
+&"RESET": SubResource("Animation_cxl1l"),
+&"gun_recoil": SubResource("Animation_a5ci3")
+}
+
+[node name="MainGun" type="Sprite2D"]
+self_modulate = Color(1, 0, 0.49803922, 1)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_cxl1l")
+script = ExtResource("2_cxl1l")
+
+[node name="Pentagon" type="Sprite2D" parent="."]
+self_modulate = Color(0.49803922, 0, 1, 1)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_a5ci3")
+
+[node name="Firepoint" type="Node2D" parent="Pentagon"]
+position = Vector2(0, -59.999992)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Pentagon")
+libraries = {
+&"": SubResource("AnimationLibrary_l2q4i")
+}
+
+[node name="ShotSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_l2q4i")
+volume_db = -10.0
+pitch_scale = 2.0
+max_distance = 10000.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="ShotSfxLoud" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_l2q4i")
+pitch_scale = 2.0
+max_distance = 10000.0
+max_polyphony = 10
+bus = &"SFX"

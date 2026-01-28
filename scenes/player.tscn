@@ -1,0 +1,543 @@
+[gd_scene load_steps=36 format=3 uid="uid://d0ix5fvxfagok"]
+
+[ext_resource type="PhysicsMaterial" uid="uid://03r51pljyqkj" path="res://resources/no_friction.tres" id="1_g2els"]
+[ext_resource type="Script" uid="uid://2mo5cx6xp8sc" path="res://scripts/player.gd" id="2_dqkch"]
+[ext_resource type="Texture2D" uid="uid://b2ylru6nfjj31" path="res://sprites/Circle.png" id="2_qhqgy"]
+[ext_resource type="Script" uid="uid://2gndo3hsdo3e" path="res://scripts/look_at_mouse.gd" id="3_dqkch"]
+[ext_resource type="Texture2D" uid="uid://cnpuxwlp1jsd3" path="res://sprites/HollowCircle.png" id="5_fjrip"]
+[ext_resource type="AudioStream" uid="uid://beuuc6wnwcwro" path="res://sounds/glass_shatter_1.wav" id="5_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://bv0g3ito4uc25" path="res://sprites/light.png" id="5_ur7pv"]
+[ext_resource type="AudioStream" uid="uid://coo00m24wlc27" path="res://sounds/glass_shatter_3.wav" id="6_tuyoq"]
+[ext_resource type="Script" uid="uid://bxgog21pi100y" path="res://scripts/player_laser_cast.gd" id="6_y4r1p"]
+[ext_resource type="Script" uid="uid://2wmyx8xmu2pc" path="res://scripts/camera.gd" id="7_3v2ag"]
+[ext_resource type="PackedScene" uid="uid://i70sc8k1v8at" path="res://scenes/player_healthbar.tscn" id="8_smehm"]
+[ext_resource type="StyleBox" uid="uid://b7k03rfoi4n0w" path="res://resources/playerbar_fill.tres" id="10_d2wvv"]
+[ext_resource type="AudioStream" uid="uid://bipxm32uv1r0o" path="res://sounds/big_laser.wav" id="10_jej6c"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dqkch"]
+radius = 39.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y4r1p"]
+radius = 39.0
+
+[sub_resource type="Curve" id="Curve_y4r1p"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.681866, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_d2wvv"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.681866, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_3v2ag"]
+_data = [Vector2(0, 0.5031847), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.681866, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Animation" id="Animation_qlg0r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rotator/Circle:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_tuyoq"]
+resource_name = "hurt"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rotator/Circle:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_dqkch"]
+resource_name = "parrying"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rotator/Circle:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(8, 1),
+"update": 0,
+"values": [Color(1, 0.49803922, 0, 1), Color(0, 1, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tuyoq"]
+_data = {
+&"RESET": SubResource("Animation_qlg0r"),
+&"hurt": SubResource("Animation_tuyoq"),
+&"parrying": SubResource("Animation_dqkch")
+}
+
+[sub_resource type="Animation" id="Animation_smehm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.45000002, 0.45000002)]
+}
+
+[sub_resource type="Animation" id="Animation_oprun"]
+resource_name = "parry"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.5, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.6, 0.6), Vector2(0.45, 0.45)]
+}
+
+[sub_resource type="Animation" id="Animation_fjrip"]
+resource_name = "pulse"
+length = 3.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.75, 1.5, 2.25, 3),
+"transitions": PackedFloat32Array(2, 1, 2, 1, 1),
+"update": 0,
+"values": [Color(0, 1, 0, 0.49803922), Color(0, 1, 0, 0.37254903), Color(0, 1, 0, 0.24705882), Color(0, 1, 0, 0.37254903), Color(0, 1, 0, 0.49803922)]
+}
+
+[sub_resource type="Animation" id="Animation_a8ls1"]
+resource_name = "successfull_parry"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.6, 0.6), Vector2(0.45, 0.45)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(3, 1),
+"update": 0,
+"values": [Color(0, 3.2944162, 0, 0.49803922), Color(0, 1, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ur7pv"]
+_data = {
+&"RESET": SubResource("Animation_smehm"),
+&"parry": SubResource("Animation_oprun"),
+&"pulse": SubResource("Animation_fjrip"),
+&"successfull_parry": SubResource("Animation_a8ls1")
+}
+
+[sub_resource type="Animation" id="Animation_3v2ag"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rotator/Circle:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.49803925]
+}
+
+[sub_resource type="Animation" id="Animation_d2wvv"]
+resource_name = "inv_anim"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rotator/Circle:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.5, 1.0, 0.5, 1.0, 0.5, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jej6c"]
+_data = {
+&"RESET": SubResource("Animation_3v2ag"),
+&"inv_anim": SubResource("Animation_d2wvv")
+}
+
+[sub_resource type="Animation" id="Animation_f1ej7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera2D:zoom")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_jej6c"]
+resource_name = "boss_2_zoom_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera2D:zoom")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.33333334, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(0.3, 0.3)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_oprun"]
+_data = {
+&"RESET": SubResource("Animation_f1ej7"),
+&"boss_2_zoom_out": SubResource("Animation_jej6c")
+}
+
+[sub_resource type="Curve" id="Curve_f1ej7"]
+_limits = [0.0, 100.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 100), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_jej6c"]
+_data = [Vector2(0, 0.75), 0.0, 0.0, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.75, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[node name="Player" type="RigidBody2D" groups=["player"]]
+z_as_relative = false
+collision_layer = 2
+collision_mask = 105
+physics_material_override = ExtResource("1_g2els")
+gravity_scale = 0.0
+lock_rotation = true
+contact_monitor = true
+max_contacts_reported = 5
+linear_damp = 2.0
+script = ExtResource("2_dqkch")
+
+[node name="PlayerCollider" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_dqkch")
+
+[node name="FireDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 64
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FireDetector"]
+visible = false
+shape = SubResource("CircleShape2D_y4r1p")
+
+[node name="Rotator" type="Node2D" parent="."]
+script = ExtResource("3_dqkch")
+
+[node name="Circle" type="Sprite2D" parent="Rotator"]
+modulate = Color(0, 1, 0, 1)
+self_modulate = Color(0, 1, 0, 0.49803925)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_qhqgy")
+
+[node name="Firepoint" type="Node2D" parent="Rotator"]
+position = Vector2(38, 0)
+
+[node name="LaserChargeVfx" type="CPUParticles2D" parent="Rotator"]
+position = Vector2(38, 0)
+emitting = false
+amount = 64
+texture = ExtResource("5_ur7pv")
+one_shot = true
+emission_shape = 1
+emission_sphere_radius = 48.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+scale_amount_min = 0.01
+scale_amount_max = 0.05
+scale_amount_curve = SubResource("Curve_y4r1p")
+color = Color(1, 1, 0, 1)
+
+[node name="LaserCast" type="RayCast2D" parent="Rotator" node_paths=PackedStringArray("line_2d", "laser_line_particles", "laser_end_particles", "laser_start_particles", "rotator", "laser_sfx")]
+position = Vector2(38, 0)
+target_position = Vector2(6000, 0)
+collision_mask = 9
+hit_from_inside = true
+collide_with_areas = true
+script = ExtResource("6_y4r1p")
+line_2d = NodePath("Line2D")
+laser_line_particles = NodePath("LaserLineVfx")
+laser_end_particles = NodePath("LaserEndVfx")
+laser_start_particles = NodePath("LaserOriginVfx")
+rotator = NodePath("..")
+laser_sfx = NodePath("../../LaserSfx")
+
+[node name="Line2D" type="Line2D" parent="Rotator/LaserCast"]
+visible = false
+points = PackedVector2Array(0, 0, -200, 0)
+width = 30.0
+default_color = Color(1.8247963, 1.8247963, 0, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+round_precision = 32
+antialiased = true
+
+[node name="LaserOriginVfx" type="CPUParticles2D" parent="Rotator/LaserCast"]
+position = Vector2(2.6226828e-06, 0)
+rotation = -1.5707964
+scale = Vector2(1.6666666, 1.6666666)
+emitting = false
+amount = 64
+texture = ExtResource("5_ur7pv")
+lifetime = 0.75
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+scale_amount_min = 0.04
+scale_amount_max = 0.2
+scale_amount_curve = SubResource("Curve_d2wvv")
+color = Color(1, 1, 0, 1)
+
+[node name="LaserLineVfx" type="CPUParticles2D" parent="Rotator/LaserCast"]
+position = Vector2(-100, 0)
+rotation = 3.1415925
+emitting = false
+amount = 512
+texture = ExtResource("5_ur7pv")
+lifetime = 0.75
+emission_shape = 3
+emission_rect_extents = Vector2(100, 18)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+scale_amount_min = 0.02
+scale_amount_max = 0.1
+scale_amount_curve = SubResource("Curve_3v2ag")
+color = Color(1, 1, 0, 1)
+
+[node name="LaserEndVfx" type="CPUParticles2D" parent="Rotator/LaserCast"]
+position = Vector2(-200.00002, 0)
+rotation = -1.5707964
+scale = Vector2(1.6666666, 1.6666666)
+emitting = false
+amount = 64
+texture = ExtResource("5_ur7pv")
+lifetime = 0.75
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+scale_amount_min = 0.04
+scale_amount_max = 0.2
+scale_amount_curve = SubResource("Curve_d2wvv")
+color = Color(1, 1, 0, 1)
+
+[node name="Camera2D" type="Camera2D" parent="." groups=["camera"]]
+zoom = Vector2(0.5, 0.5)
+script = ExtResource("7_3v2ag")
+
+[node name="Timers" type="Node" parent="."]
+
+[node name="DashCooldown" type="Timer" parent="Timers"]
+wait_time = 0.25
+one_shot = true
+
+[node name="ShootingCooldown" type="Timer" parent="Timers"]
+one_shot = true
+autostart = true
+
+[node name="ParryC" type="Timer" parent="Timers"]
+wait_time = 0.5
+one_shot = true
+
+[node name="FadingSpriteC" type="Timer" parent="Timers"]
+wait_time = 0.05
+autostart = true
+
+[node name="IFrames" type="Timer" parent="Timers"]
+wait_time = 0.5
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_tuyoq")
+}
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+
+[node name="HurtSfx" type="AudioStreamPlayer2D" parent="."]
+process_mode = 3
+stream = ExtResource("5_qlg0r")
+volume_db = -10.0
+max_polyphony = 5
+bus = &"SFX"
+
+[node name="ParrySfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_tuyoq")
+volume_db = -8.0
+pitch_scale = 1.5
+max_polyphony = 3
+bus = &"SFX"
+
+[node name="LaserSfx" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(114, 0)
+scale = Vector2(0.8, 1e-05)
+stream = ExtResource("10_jej6c")
+max_distance = 10000.0
+bus = &"BigLaser"
+
+[node name="Healthbar" parent="." instance=ExtResource("8_smehm")]
+offset_left = -64.0
+offset_top = -80.0
+offset_right = 64.0
+offset_bottom = -64.0
+theme_override_styles/fill = ExtResource("10_d2wvv")
+
+[node name="ParryRingClip" type="TextureProgressBar" parent="."]
+clip_children = 1
+custom_minimum_size = Vector2(100, 100)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 10.0
+fill_mode = 4
+texture_progress = ExtResource("2_qhqgy")
+
+[node name="ParryCharge" type="Sprite2D" parent="ParryRingClip"]
+self_modulate = Color(1, 1, 1, 0)
+position = Vector2(127.5, 127.5)
+scale = Vector2(0.45000002, 0.45000002)
+texture = ExtResource("5_fjrip")
+
+[node name="ParryChargePulse" type="AnimationPlayer" parent="ParryRingClip/ParryCharge"]
+libraries = {
+&"": SubResource("AnimationLibrary_ur7pv")
+}
+
+[node name="InvincibilityAnimation" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_jej6c")
+}
+
+[node name="CameraAnimPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_oprun")
+}
+
+[node name="KillParticleExplosion" type="CPUParticles2D" parent="."]
+process_mode = 3
+emitting = false
+amount = 256
+texture = ExtResource("2_qhqgy")
+lifetime = 3.0
+one_shot = true
+explosiveness = 1.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 650.0
+damping_min = 15.0
+damping_max = 25.0
+damping_curve = SubResource("Curve_f1ej7")
+scale_amount_min = 0.1
+scale_amount_max = 0.3
+scale_amount_curve = SubResource("Curve_jej6c")
+color = Color(0, 1, 0, 1)
+
+[node name="ParryEffect" type="Sprite2D" parent="."]
+self_modulate = Color(0, 1, 0, 0)
+scale = Vector2(0.45000002, 0.45000002)
+texture = ExtResource("5_fjrip")
+
+[node name="ParryEffectAnim" type="AnimationPlayer" parent="ParryEffect"]
+libraries = {
+&"": SubResource("AnimationLibrary_ur7pv")
+}
+
+[connection signal="timeout" from="Timers/DashCooldown" to="." method="_on_dash_cooldown_timeout"]
+[connection signal="timeout" from="Timers/ShootingCooldown" to="." method="_on_shooting_cooldown_timeout"]
+[connection signal="timeout" from="Timers/ParryC" to="." method="_on_shooting_cooldown_timeout"]
+[connection signal="timeout" from="Timers/FadingSpriteC" to="." method="_on_fading_sprite_c_timeout"]

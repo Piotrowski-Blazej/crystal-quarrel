@@ -1,0 +1,172 @@
+[gd_scene load_steps=12 format=3 uid="uid://ckowdpdefiht7"]
+
+[ext_resource type="Texture2D" uid="uid://cod7nspsk8anq" path="res://sprites/heptagon.png" id="1_4derp"]
+[ext_resource type="Script" uid="uid://cx8b2b5fmmiro" path="res://scripts/fire_area.gd" id="1_jg4yq"]
+[ext_resource type="Texture2D" uid="uid://b2ylru6nfjj31" path="res://sprites/Circle.png" id="3_fikp7"]
+[ext_resource type="Texture2D" uid="uid://cnpuxwlp1jsd3" path="res://sprites/HollowCircle.png" id="4_6j4n4"]
+
+[sub_resource type="Curve" id="Curve_jg4yq"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.05, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_gig8x"]
+offsets = PackedFloat32Array(0, 0.5, 0.8)
+colors = PackedColorArray(1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fikp7"]
+radius = 128.0
+
+[sub_resource type="Animation" id="Animation_6j4n4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:collision_layer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [64]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Circle:self_modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("HollowCircle:self_modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_fikp7"]
+resource_name = "fade_away"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:collision_layer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.75),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_7b41u"]
+resource_name = "fade_in_ring"
+length = 0.75
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Circle:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.75),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.05882353]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HollowCircle:self_modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.75),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.12156863]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7b41u"]
+_data = {
+&"RESET": SubResource("Animation_6j4n4"),
+&"fade_away": SubResource("Animation_fikp7"),
+&"fade_in_ring": SubResource("Animation_7b41u")
+}
+
+[node name="FireArea" type="Area2D"]
+z_index = -4
+z_as_relative = false
+collision_layer = 64
+collision_mask = 0
+monitoring = false
+script = ExtResource("1_jg4yq")
+
+[node name="ThrusterParticles" type="CPUParticles2D" parent="."]
+amount = 32
+texture = ExtResource("1_4derp")
+emission_shape = 1
+emission_sphere_radius = 128.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 25.0
+initial_velocity_max = 50.0
+angular_velocity_min = -270.0
+angular_velocity_max = 270.0
+scale_amount_min = 0.4
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_jg4yq")
+color = Color(1, 0.24705882, 0, 1)
+color_ramp = SubResource("Gradient_gig8x")
+
+[node name="Circle" type="Sprite2D" parent="."]
+self_modulate = Color(1, 0.24705882, 0, 0)
+texture = ExtResource("3_fikp7")
+
+[node name="HollowCircle" type="Sprite2D" parent="."]
+self_modulate = Color(1, 0.24705882, 0, 0)
+texture = ExtResource("4_6j4n4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_fikp7")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_7b41u")
+}

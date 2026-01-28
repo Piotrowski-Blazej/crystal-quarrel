@@ -1,0 +1,178 @@
+[gd_scene load_steps=4 format=3 uid="uid://b0m55gquhs0iv"]
+
+[ext_resource type="Script" uid="uid://d12jfxc8l07is" path="res://scripts/leaderboard.gd" id="1_q1831"]
+[ext_resource type="LabelSettings" uid="uid://bm82a0tqpn2pj" path="res://resources/labelsettings/leaderboard_label_settings.tres" id="2_1epml"]
+[ext_resource type="Script" uid="uid://ctsla76hdypqt" path="res://scripts/fadeout_rect.gd" id="3_1epml"]
+
+[node name="Leaderboard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_q1831")
+
+[node name="AllRowContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ColumnNames" type="HBoxContainer" parent="AllRowContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Username" type="Label" parent="AllRowContainer/ColumnNames"]
+self_modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(460, 85)
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Username"
+label_settings = ExtResource("2_1epml")
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Boss" type="Label" parent="AllRowContainer/ColumnNames"]
+self_modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(240, 85)
+layout_mode = 2
+size_flags_horizontal = 6
+text = "All
+Bosses"
+label_settings = ExtResource("2_1epml")
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="BossButton" type="Button" parent="AllRowContainer/ColumnNames/Boss"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Difficulty" type="Label" parent="AllRowContainer/ColumnNames"]
+self_modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(240, 85)
+layout_mode = 2
+size_flags_horizontal = 6
+text = "All
+Difficulties"
+label_settings = ExtResource("2_1epml")
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="DifficultyButton" type="Button" parent="AllRowContainer/ColumnNames/Difficulty"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Time" type="Label" parent="AllRowContainer/ColumnNames"]
+self_modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(180, 85)
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Time"
+label_settings = ExtResource("2_1epml")
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="DamageTaken" type="Label" parent="AllRowContainer/ColumnNames"]
+self_modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(144, 85)
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Damage
+Taken"
+label_settings = ExtResource("2_1epml")
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="HitsParried" type="Label" parent="AllRowContainer/ColumnNames"]
+self_modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(152, 85)
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Hits
+Parried"
+label_settings = ExtResource("2_1epml")
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="AllRowContainer"]
+custom_minimum_size = Vector2(1436, 940)
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="RowContainer" type="VBoxContainer" parent="AllRowContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+metadata/_edit_use_anchors_ = true
+
+[node name="BackButton" type="Button" parent="."]
+modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(96, 41)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -8.0
+offset_right = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+flat = true
+
+[node name="BackLabel" type="Label" parent="BackButton"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -41.0
+offset_right = 48.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Back"
+label_settings = ExtResource("2_1epml")
+
+[node name="TempRowContainer" type="Node" parent="."]
+
+[node name="FadeoutRect" type="ColorRect" parent="." groups=["fadeout_rect"]]
+z_index = 10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+script = ExtResource("3_1epml")
+
+[connection signal="button_up" from="AllRowContainer/ColumnNames/Boss/BossButton" to="." method="_on_boss_button_button_up"]
+[connection signal="button_up" from="AllRowContainer/ColumnNames/Difficulty/DifficultyButton" to="." method="_on_difficulty_button_button_up"]
+[connection signal="button_up" from="BackButton" to="." method="_on_back_button_button_up"]

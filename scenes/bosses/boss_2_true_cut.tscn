@@ -1,0 +1,169 @@
+[gd_scene load_steps=14 format=3 uid="uid://bsht1vsmct4ro"]
+
+[ext_resource type="Script" uid="uid://dhvtih506pm1f" path="res://scripts/bosses/boss2/boss_2_true_cut.gd" id="1_80g8e"]
+[ext_resource type="Texture2D" uid="uid://qcxqwk2iu6h6" path="res://sprites/triangle.png" id="2_jgws1"]
+[ext_resource type="Texture2D" uid="uid://cod7nspsk8anq" path="res://sprites/heptagon.png" id="2_vt7ed"]
+[ext_resource type="AudioStream" uid="uid://qabagcoagylw" path="res://sounds/dash.wav" id="6_gim1v"]
+[ext_resource type="Script" uid="uid://b5pt1eyfbndyw" path="res://scripts/delete_when_done.gd" id="6_wlx3q"]
+[ext_resource type="AudioStream" uid="uid://coo00m24wlc27" path="res://sounds/glass_shatter_3.wav" id="7_tx6pp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dy7kq"]
+size = Vector2(384, 384)
+
+[sub_resource type="Curve" id="Curve_3d43o"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.05, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_dy7kq"]
+offsets = PackedFloat32Array(0, 0.5, 0.8)
+colors = PackedColorArray(1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_7nsm3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LaserWarning:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.5]
+}
+
+[sub_resource type="Animation" id="Animation_3d43o"]
+resource_name = "fade_in"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LaserWarning:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0.0, 0.5, 0.0, 0.5]
+}
+
+[sub_resource type="Animation" id="Animation_dy7kq"]
+resource_name = "fade_out"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LaserWarning:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.8),
+"transitions": PackedFloat32Array(1, 3, 1),
+"update": 0,
+"values": [0.5, 2.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dy7kq"]
+_data = {
+&"RESET": SubResource("Animation_7nsm3"),
+&"fade_in": SubResource("Animation_3d43o"),
+&"fade_out": SubResource("Animation_dy7kq")
+}
+
+[node name="Boss2Cut" type="Node2D"]
+script = ExtResource("1_80g8e")
+
+[node name="LaserWarning" type="Polygon2D" parent="."]
+modulate = Color(1, 0, 0, 0.5)
+self_modulate = Color(1, 1, 1, 0.24705882)
+z_index = -6
+z_as_relative = false
+polygon = PackedVector2Array(-8192, 192, 8192, 192, 8192, -192, -8192, -192)
+
+[node name="Outline" type="Line2D" parent="LaserWarning"]
+self_modulate = Color(1, 1, 1, 0.49803922)
+points = PackedVector2Array(-8192, 192, 8192, 192, 8192, -192, -8192, -192)
+closed = true
+width = 8.0
+
+[node name="TextureRect" type="TextureRect" parent="LaserWarning"]
+self_modulate = Color(1, 1, 1, 0.24705882)
+texture_repeat = 2
+custom_minimum_size = Vector2(0, 128)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 8192.0
+offset_top = -64.0
+offset_right = 8320.0
+offset_bottom = 16320.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 1.5707964
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_jgws1")
+stretch_mode = 1
+
+[node name="BossHitbox" type="Area2D" parent="."]
+position = Vector2(-8192, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BossHitbox"]
+shape = SubResource("RectangleShape2D_dy7kq")
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="BossHitbox"]
+update_scale = false
+
+[node name="ThrusterParticles" type="CPUParticles2D" parent="BossHitbox"]
+position = Vector2(-170, 0)
+amount = 160
+texture = ExtResource("2_vt7ed")
+emission_shape = 3
+emission_rect_extents = Vector2(1, 100)
+direction = Vector2(-1, 0)
+spread = 60.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 200.0
+initial_velocity_max = 400.0
+angular_velocity_min = -270.0
+angular_velocity_max = 270.0
+scale_amount_min = 0.4
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_3d43o")
+color = Color(1, 0.24705882, 0, 1)
+color_ramp = SubResource("Gradient_dy7kq")
+script = ExtResource("6_wlx3q")
+
+[node name="ShatterSfx" type="AudioStreamPlayer2D" parent="BossHitbox"]
+stream = ExtResource("7_tx6pp")
+volume_db = 2.0
+pitch_scale = 0.7
+max_distance = 5000.0
+max_polyphony = 4
+bus = &"SFX"
+script = ExtResource("6_wlx3q")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_dy7kq")
+}
+
+[node name="Lifetime" type="Timer" parent="."]
+
+[node name="FadingSpriteC" type="Timer" parent="."]
+
+[node name="DashSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_gim1v")
+volume_db = 4.0
+pitch_scale = 4.0
+max_distance = 6000.0
+bus = &"Chorus"
+
+[connection signal="body_entered" from="BossHitbox" to="." method="_on_boss_hitbox_body_entered"]
+[connection signal="timeout" from="Lifetime" to="." method="_on_lifetime_timeout"]

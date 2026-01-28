@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://bi7ww3dqurkv1"]
+
+[ext_resource type="FontFile" uid="uid://dsb6robiiiisa" path="res://sprites/fonts/Silkscreen-Regular.ttf" id="1_inieu"]
+
+[resource]
+font = ExtResource("1_inieu")
+font_size = 64
+shadow_size = 0

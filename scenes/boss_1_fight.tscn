@@ -1,0 +1,75 @@
+[gd_scene load_steps=8 format=3 uid="uid://d374n77822n4u"]
+
+[ext_resource type="Environment" uid="uid://pgfs1uurpsy6" path="res://resources/world_enviorment.tres" id="1_a3poy"]
+[ext_resource type="PackedScene" uid="uid://d0ix5fvxfagok" path="res://scenes/player.tscn" id="2_jf43i"]
+[ext_resource type="Texture2D" uid="uid://b2ylru6nfjj31" path="res://sprites/Circle.png" id="3_t6wua"]
+[ext_resource type="PackedScene" uid="uid://dgs2gn5rx5i18" path="res://scenes/bossbar.tscn" id="4_benxy"]
+[ext_resource type="PackedScene" uid="uid://djkh6vwmxgp46" path="res://scenes/bosses/boss_1.tscn" id="5_a3poy"]
+[ext_resource type="Script" uid="uid://ctsla76hdypqt" path="res://scripts/fadeout_rect.gd" id="5_jf43i"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0wfyh"]
+size = Vector2(700, 4696)
+
+[node name="WorldCenter" type="Node2D" groups=["world_center"]]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_a3poy")
+
+[node name="Player" parent="." instance=ExtResource("2_jf43i")]
+position = Vector2(-1024, 0)
+
+[node name="Border" type="StaticBody2D" parent="." groups=["wall"]]
+z_index = -1
+z_as_relative = false
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Border"]
+color = Color(1, 0, 0, 1)
+invert_enabled = true
+polygon = PackedVector2Array(2048, 2048, 2048, -2048, -2048, -2048, -2048, 2048)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Border"]
+visible = false
+position = Vector2(2398, 0)
+shape = SubResource("RectangleShape2D_0wfyh")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Border"]
+visible = false
+position = Vector2(-2398, 0)
+shape = SubResource("RectangleShape2D_0wfyh")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Border"]
+visible = false
+position = Vector2(0, -2398)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_0wfyh")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Border"]
+visible = false
+position = Vector2(0, 2398)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_0wfyh")
+
+[node name="CenterCircle" type="Sprite2D" parent="."]
+visible = false
+self_modulate = Color(1, 0, 0, 1)
+z_index = -10
+z_as_relative = false
+texture = ExtResource("3_t6wua")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Bossbar" parent="UI" instance=ExtResource("4_benxy")]
+offset_left = -576.0
+offset_right = 448.0
+
+[node name="FadeoutRect" type="ColorRect" parent="UI" groups=["fadeout_rect"]]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+script = ExtResource("5_jf43i")
+
+[node name="Boss1" parent="." instance=ExtResource("5_a3poy")]

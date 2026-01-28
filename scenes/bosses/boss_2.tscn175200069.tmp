@@ -1,0 +1,540 @@
+[gd_scene load_steps=34 format=3 uid="uid://cq6io0kh4oiju"]
+
+[ext_resource type="Script" uid="uid://wsk5hufjmkwj" path="res://scripts/bosses/boss2/boss_2.gd" id="1_7ts43"]
+[ext_resource type="Texture2D" uid="uid://cod7nspsk8anq" path="res://sprites/heptagon.png" id="1_anxjj"]
+[ext_resource type="PackedScene" uid="uid://bu4r6ailxhd7o" path="res://scenes/bosses/boss2_turret.tscn" id="4_l4xox"]
+[ext_resource type="PackedScene" uid="uid://lri8f1liwlm2" path="res://scenes/bosses/boss2_main_gun.tscn" id="5_elpwp"]
+[ext_resource type="Script" uid="uid://jxjcntqlb7k3" path="res://scripts/state_machine.gd" id="6_22yqs"]
+[ext_resource type="Texture2D" uid="uid://bv0g3ito4uc25" path="res://sprites/light.png" id="6_fguq8"]
+[ext_resource type="Script" uid="uid://d013opmonh02o" path="res://scripts/huge_laser.gd" id="7_0rd0q"]
+[ext_resource type="Script" uid="uid://c7hib542jca23" path="res://scripts/cracks.gd" id="7_udly2"]
+[ext_resource type="Script" uid="uid://bg0w3y5gooyg7" path="res://scripts/bosses/boss2/boss_2_dash.gd" id="8_g3w2q"]
+[ext_resource type="Texture2D" uid="uid://dqchlr6fhu5mq" path="res://sprites/Square.png" id="8_h8vgx"]
+[ext_resource type="Script" uid="uid://3rpm8v34aosh" path="res://scripts/bosses/boss2/bullet_wall.gd" id="9_udly2"]
+[ext_resource type="AudioStream" uid="uid://cf8dsknx3cnjq" path="res://sounds/glass_shatter_2.wav" id="10_h8vgx"]
+[ext_resource type="Script" uid="uid://dnm428pdy2x8i" path="res://scripts/bosses/boss2/homing_bullet_hell.gd" id="10_l4xox"]
+[ext_resource type="Script" uid="uid://dmgxv6rleits1" path="res://scripts/bosses/boss2/homing_fastball.gd" id="11_l4xox"]
+[ext_resource type="PackedScene" uid="uid://cln2rthdq86i5" path="res://scenes/bosses/barrier.tscn" id="13_elpwp"]
+[ext_resource type="Script" uid="uid://cg4wgcbfmemu6" path="res://scripts/bosses/boss2/quick_lasers.gd" id="15_0rd0q"]
+[ext_resource type="Script" uid="uid://c1tuv42ijqlsj" path="res://scripts/bosses/boss2/quick_missiles.gd" id="16_j05es"]
+
+[sub_resource type="Curve" id="Curve_j05es"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.681866, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5ppss"]
+size = Vector2(8192, 128)
+
+[sub_resource type="Curve" id="Curve_kcg2t"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.681866, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_k3drf"]
+_data = [Vector2(0, 0.5031847), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.681866, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Animation" id="Animation_hy6t6"]
+resource_name = "FireLaser"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0, 0, 1, 1), Color(0, 0.49803922, 0.49803922, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_wnp8b"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_74nxv"]
+_data = {
+&"FireLaser": SubResource("Animation_hy6t6"),
+&"RESET": SubResource("Animation_wnp8b")
+}
+
+[sub_resource type="Curve" id="Curve_l4xox"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.4903033, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_r10pe"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.05, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_r10pe"]
+offsets = PackedFloat32Array(0, 0.5, 0.8)
+colors = PackedColorArray(1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="Curve" id="Curve_udly2"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.05, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_h8vgx"]
+offsets = PackedFloat32Array(0, 0.5, 0.8)
+colors = PackedColorArray(1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_l4xox"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Heptagon:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FireAreaParticles:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FireAreaParticles:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_h8vgx"]
+resource_name = "dash_charge"
+length = 0.75
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Heptagon:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 1), Color(0.49803922, 0, 1, 1), Color(1, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_elpwp"]
+resource_name = "fire_area"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FireAreaParticles:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.1, 0.1), Vector2(5, 5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FireAreaParticles:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_elpwp"]
+_data = {
+&"RESET": SubResource("Animation_l4xox"),
+&"dash_charge": SubResource("Animation_h8vgx"),
+&"fire_area": SubResource("Animation_elpwp")
+}
+
+[node name="Boss2" type="Area2D" groups=["takes_damage"]]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("1_7ts43")
+
+[node name="Heptagon" type="Sprite2D" parent="."]
+self_modulate = Color(1, 0, 0, 1)
+rotation = 1.5707964
+scale = Vector2(3, 3)
+texture = ExtResource("1_anxjj")
+
+[node name="ClipHeptagon" type="Sprite2D" parent="Heptagon"]
+clip_children = 1
+texture = ExtResource("1_anxjj")
+
+[node name="Cracks" type="TextureRect" parent="Heptagon/ClipHeptagon" node_paths=PackedStringArray("particles")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -64.00001
+offset_top = 64.0
+offset_right = -64.00001
+offset_bottom = 67.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+script = ExtResource("7_udly2")
+particles = NodePath("../../../CrackParticles")
+particle_amount_small = 256
+particle_amount_large = 512
+
+[node name="Turret" parent="Heptagon" instance=ExtResource("4_l4xox")]
+position = Vector2(-40, -28)
+left = true
+front = true
+
+[node name="Turret2" parent="Heptagon" instance=ExtResource("4_l4xox")]
+position = Vector2(40, -28)
+front = true
+
+[node name="Turret3" parent="Heptagon" instance=ExtResource("4_l4xox")]
+position = Vector2(48, 15.000001)
+
+[node name="Turret4" parent="Heptagon" instance=ExtResource("4_l4xox")]
+position = Vector2(-48, 15)
+left = true
+
+[node name="MainGun" parent="Heptagon" instance=ExtResource("5_elpwp")]
+position = Vector2(0, -2)
+
+[node name="LaserChargeVfx" type="CPUParticles2D" parent="Heptagon"]
+process_mode = 4
+position = Vector2(0, -20)
+scale = Vector2(2, 2)
+emitting = false
+amount = 512
+texture = ExtResource("6_fguq8")
+lifetime = 2.0
+one_shot = true
+emission_shape = 1
+emission_sphere_radius = 64.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+scale_amount_min = 0.01
+scale_amount_max = 0.05
+scale_amount_curve = SubResource("Curve_j05es")
+color = Color(0, 1, 1, 1)
+
+[node name="HugeLaser" type="Area2D" parent="Heptagon" node_paths=PackedStringArray("line_2d", "laser_line_top_particles", "laser_line_bottom_particles", "laser_start_particles", "anim_player", "warning")]
+process_mode = 4
+visible = false
+z_index = 1
+z_as_relative = false
+position = Vector2(-3.6717565e-06, -84)
+rotation = -1.5707964
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("7_0rd0q")
+line_2d = NodePath("Line2D")
+duration = 2.0
+laser_line_top_particles = NodePath("LaserLineTopVfx")
+laser_line_bottom_particles = NodePath("LaserLineBottomVfx")
+laser_start_particles = NodePath("LaserOriginVfx")
+anim_player = NodePath("LaserAnimPlayer")
+warning = NodePath("../LaserWarning")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Heptagon/HugeLaser"]
+visible = false
+position = Vector2(4096, 0)
+shape = SubResource("RectangleShape2D_5ppss")
+
+[node name="Line2D" type="Line2D" parent="Heptagon/HugeLaser"]
+points = PackedVector2Array(0, 0, 8192, 0)
+width = 128.0
+default_color = Color(0, 1.8247963, 1.8247963, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+round_precision = 32
+antialiased = true
+
+[node name="LaserOriginVfx" type="CPUParticles2D" parent="Heptagon/HugeLaser"]
+rotation = -1.5707964
+scale = Vector2(2, 2)
+emitting = false
+amount = 128
+texture = ExtResource("6_fguq8")
+lifetime = 0.75
+emission_shape = 2
+emission_sphere_radius = 32.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+scale_amount_min = 0.04
+scale_amount_max = 0.2
+scale_amount_curve = SubResource("Curve_kcg2t")
+color = Color(0, 1, 1, 1)
+
+[node name="LaserLineTopVfx" type="CPUParticles2D" parent="Heptagon/HugeLaser"]
+position = Vector2(4096, -64)
+rotation = 3.1415925
+scale = Vector2(1.0000001, 1.0000001)
+emitting = false
+amount = 1024
+texture = ExtResource("6_fguq8")
+lifetime = 0.75
+emission_shape = 3
+emission_rect_extents = Vector2(4096, 4)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+scale_amount_min = 0.02
+scale_amount_max = 0.1
+scale_amount_curve = SubResource("Curve_k3drf")
+color = Color(0, 1, 1, 1)
+
+[node name="LaserLineBottomVfx" type="CPUParticles2D" parent="Heptagon/HugeLaser"]
+position = Vector2(4096, 64)
+rotation = 3.1415925
+scale = Vector2(1.0000001, 1.0000001)
+emitting = false
+amount = 1024
+texture = ExtResource("6_fguq8")
+lifetime = 0.75
+emission_shape = 3
+emission_rect_extents = Vector2(4096, 4)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+scale_amount_min = 0.02
+scale_amount_max = 0.1
+scale_amount_curve = SubResource("Curve_k3drf")
+color = Color(0, 1, 1, 1)
+
+[node name="LaserAnimPlayer" type="AnimationPlayer" parent="Heptagon/HugeLaser"]
+libraries = {
+&"": SubResource("AnimationLibrary_74nxv")
+}
+
+[node name="LaserWarning" type="Polygon2D" parent="Heptagon"]
+process_mode = 4
+visible = false
+z_index = -6
+z_as_relative = false
+position = Vector2(-8.88798e-07, -20.333332)
+rotation = -1.5707964
+color = Color(1, 0, 0, 0.24705882)
+polygon = PackedVector2Array(-4, 68, 8192, 68, 8192, -68, -4, -68)
+
+[node name="Outline" type="Line2D" parent="Heptagon/LaserWarning"]
+points = PackedVector2Array(0, 64, 8192, 64, 8192, -64, 0, -64)
+closed = true
+width = 8.0
+default_color = Color(1, 0, 0, 0.49803922)
+
+[node name="CrackParticles" type="CPUParticles2D" parent="."]
+rotation = 1.5707964
+scale = Vector2(1.3, 1.3)
+emitting = false
+amount = 128
+texture = ExtResource("8_h8vgx")
+lifetime = 2.0
+one_shot = true
+explosiveness = 1.0
+emission_shape = 1
+emission_sphere_radius = 128.0
+spread = 180.0
+gravity = Vector2(0, 100)
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+scale_amount_min = 0.05
+scale_amount_max = 0.05
+scale_amount_curve = SubResource("Curve_l4xox")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+visible = false
+polygon = PackedVector2Array(188, 0, 114, -154, -54, -192, -188, -86, -188, 86, -54, 192, 114, 154)
+
+[node name="ThrusterParticles" type="CPUParticles2D" parent="."]
+position = Vector2(-170, 0)
+amount = 160
+texture = ExtResource("1_anxjj")
+emission_shape = 3
+emission_rect_extents = Vector2(1, 100)
+direction = Vector2(-1, 0)
+spread = 60.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 200.0
+initial_velocity_max = 400.0
+angular_velocity_min = -270.0
+angular_velocity_max = 270.0
+scale_amount_min = 0.4
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_r10pe")
+color = Color(1, 0.24705882, 0, 1)
+color_ramp = SubResource("Gradient_r10pe")
+
+[node name="FireAreaParticles" type="CPUParticles2D" parent="."]
+z_index = -4
+z_as_relative = false
+amount = 256
+texture = ExtResource("1_anxjj")
+emission_shape = 1
+emission_sphere_radius = 128.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 25.0
+initial_velocity_max = 50.0
+angular_velocity_min = -270.0
+angular_velocity_max = 270.0
+scale_amount_min = 0.4
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_udly2")
+color = Color(1, 0.24705882, 0, 1)
+color_ramp = SubResource("Gradient_h8vgx")
+
+[node name="Barrier" parent="." instance=ExtResource("13_elpwp")]
+process_mode = 4
+
+[node name="PlayerCollider" type="StaticBody2D" parent="."]
+scale = Vector2(0.95, 0.95)
+collision_layer = 32
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PlayerCollider"]
+visible = false
+polygon = PackedVector2Array(188, 0, 114, -154, -54, -192, -188, -86, -188, 86, -54, 192, 114, 154)
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("6_22yqs")
+initial_state = NodePath("BulletWall")
+
+[node name="Boss2Dash" type="Node" parent="StateMachine" node_paths=PackedStringArray("animation_player", "boss", "misc_timer", "turrets")]
+script = ExtResource("8_g3w2q")
+animation_player = NodePath("../../MainAnimationPlayer")
+boss = NodePath("../..")
+misc_timer = NodePath("../../Timers/MiscStateTimer")
+turrets = [NodePath("../../Heptagon/Turret"), NodePath("../../Heptagon/Turret2"), NodePath("../../Heptagon/Turret3"), NodePath("../../Heptagon/Turret4")]
+
+[node name="BulletWall" type="Node" parent="StateMachine" node_paths=PackedStringArray("main_anim_player", "boss", "misc_timer", "dash_d_timer", "turrets")]
+script = ExtResource("9_udly2")
+main_anim_player = NodePath("../../MainAnimationPlayer")
+boss = NodePath("../..")
+misc_timer = NodePath("../../Timers/MiscStateTimer")
+dash_d_timer = NodePath("../../Timers/DashD")
+turrets = [NodePath("../../Heptagon/Turret"), NodePath("../../Heptagon/Turret2"), NodePath("../../Heptagon/Turret3"), NodePath("../../Heptagon/Turret4")]
+
+[node name="HomingBulletHell" type="Node" parent="StateMachine" node_paths=PackedStringArray("boss", "misc_timer", "misc_timer_2", "dash_d_timer", "turrets")]
+script = ExtResource("10_l4xox")
+boss = NodePath("../..")
+misc_timer = NodePath("../../Timers/MiscStateTimer")
+misc_timer_2 = NodePath("../../Timers/MiscStateTimer2")
+dash_d_timer = NodePath("../../Timers/DashD")
+turrets = [NodePath("../../Heptagon/Turret"), NodePath("../../Heptagon/Turret2"), NodePath("../../Heptagon/Turret3"), NodePath("../../Heptagon/Turret4")]
+
+[node name="HomingFastball" type="Node" parent="StateMachine" node_paths=PackedStringArray("boss", "barrier", "misc_timer", "dash_d_timer", "main_gun")]
+script = ExtResource("11_l4xox")
+boss = NodePath("../..")
+barrier = NodePath("../../Barrier")
+misc_timer = NodePath("../../Timers/MiscStateTimer")
+dash_d_timer = NodePath("../../Timers/DashD")
+main_gun = NodePath("../../Heptagon/MainGun")
+
+[node name="QuickLasers" type="Node" parent="StateMachine" node_paths=PackedStringArray("main_anim_player", "boss", "dash_d_timer", "left_turret", "right_turret")]
+script = ExtResource("15_0rd0q")
+main_anim_player = NodePath("../../MainAnimationPlayer")
+boss = NodePath("../..")
+dash_d_timer = NodePath("../../Timers/DashD")
+left_turret = NodePath("../../Heptagon/Turret")
+right_turret = NodePath("../../Heptagon/Turret2")
+
+[node name="QuickMissiles" type="Node" parent="StateMachine" node_paths=PackedStringArray("animation_player", "boss", "misc_timer", "main_gun")]
+script = ExtResource("16_j05es")
+animation_player = NodePath("../../MainAnimationPlayer")
+boss = NodePath("../..")
+misc_timer = NodePath("../../Timers/MiscStateTimer")
+main_gun = NodePath("../../Heptagon/MainGun")
+
+[node name="Timers" type="Node" parent="."]
+
+[node name="FadingSpriteC" type="Timer" parent="Timers"]
+wait_time = 0.05
+
+[node name="MiscStateTimer" type="Timer" parent="Timers"]
+
+[node name="MiscStateTimer2" type="Timer" parent="Timers"]
+
+[node name="DashD" type="Timer" parent="Timers"]
+one_shot = true
+
+[node name="HitSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_h8vgx")
+volume_db = 2.0
+max_distance = 5000.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="MainAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_elpwp")
+}
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="enter_phase_2" from="." to="StateMachine/Boss2Dash" method="enter_phase_2"]
+[connection signal="enter_phase_2" from="." to="StateMachine/HomingBulletHell" method="enter_phase_2"]
+[connection signal="enter_phase_2" from="." to="StateMachine/HomingFastball" method="enter_phase_2"]
+[connection signal="body_entered" from="Heptagon/HugeLaser" to="Heptagon/HugeLaser" method="_on_body_entered"]
+[connection signal="timeout" from="Timers/FadingSpriteC" to="." method="_on_fading_sprite_c_timeout"]
+[connection signal="timeout" from="Timers/DashD" to="." method="_on_dash_d_timeout"]

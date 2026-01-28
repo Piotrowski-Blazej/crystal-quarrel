@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://1cudyanr36wk"]
+
+[ext_resource type="Script" uid="uid://cdyh0dab7sgbv" path="res://scripts/enemy_missile.gd" id="1_mrhel"]
+[ext_resource type="Texture2D" uid="uid://b2ylru6nfjj31" path="res://sprites/Circle.png" id="2_mrhel"]
+[ext_resource type="Texture2D" uid="uid://qcxqwk2iu6h6" path="res://sprites/triangle.png" id="3_mrhel"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4g3gs"]
+radius = 20.0
+
+[node name="EnemyMissile" type="Area2D"]
+z_index = -2
+z_as_relative = false
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_mrhel")
+
+[node name="Circle" type="Sprite2D" parent="."]
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("2_mrhel")
+
+[node name="Triangle" type="Sprite2D" parent="Circle"]
+self_modulate = Color(0, 0, 1, 1)
+position = Vector2(12, 0)
+rotation = 1.5707964
+texture = ExtResource("3_mrhel")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_4g3gs")
+
+[node name="FadingSpirteC" type="Timer" parent="."]
+wait_time = 0.05
+autostart = true
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="FadingSpirteC" to="." method="_on_fading_spirte_c_timeout"]

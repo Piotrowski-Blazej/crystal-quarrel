@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://i70sc8k1v8at"]
+
+[ext_resource type="StyleBox" uid="uid://crw5312ulr55d" path="res://resources/bossbar_background.tres" id="1_5okj6"]
+[ext_resource type="StyleBox" uid="uid://cx5upcxjp7jky" path="res://resources/bossbar_fill.tres" id="2_jxyqh"]
+[ext_resource type="Script" uid="uid://c7t2e2b7dhhxb" path="res://scripts/playerbar.gd" id="3_5okj6"]
+
+[node name="Healthbar" type="ProgressBar"]
+custom_minimum_size = Vector2(128, 16)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -576.0
+offset_right = -448.0
+offset_bottom = 16.0
+grow_horizontal = 2
+theme_override_styles/background = ExtResource("1_5okj6")
+theme_override_styles/fill = ExtResource("2_jxyqh")
+show_percentage = false
+script = ExtResource("3_5okj6")

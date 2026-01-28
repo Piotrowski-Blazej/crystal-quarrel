@@ -1,0 +1,327 @@
+[gd_scene load_steps=8 format=3 uid="uid://bbaywroopna3x"]
+
+[ext_resource type="Script" uid="uid://baabe5pm04hqw" path="res://scripts/main_menu.gd" id="1_bqqt6"]
+[ext_resource type="LabelSettings" uid="uid://budx537sjqctb" path="res://resources/labelsettings/main_menu_title.tres" id="1_l6cm7"]
+[ext_resource type="LabelSettings" uid="uid://bi7ww3dqurkv1" path="res://resources/labelsettings/play.tres" id="2_ekxnf"]
+[ext_resource type="Script" uid="uid://ctsla76hdypqt" path="res://scripts/fadeout_rect.gd" id="4_wu84c"]
+
+[sub_resource type="Animation" id="Animation_l6cm7"]
+resource_name = "pulse"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainMenuContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 2, 1),
+"update": 0,
+"values": [Color(1, 0, 0.24705882, 1), Color(1, 0, 0.49803922, 1), Color(1, 0, 0.24705882, 1), Color(1, 0, 0, 1), Color(1, 0, 0.24705882, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayMenuContainer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 2, 1),
+"update": 0,
+"values": [Color(1, 0, 0.24705882, 1), Color(1, 0, 0.49803922, 1), Color(1, 0, 0.24705882, 1), Color(1, 0, 0, 1), Color(1, 0, 0.24705882, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("DifficultyMenuContainer/Select:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 2, 1),
+"update": 0,
+"values": [Color(1, 0, 0.24705882, 1), Color(1, 0, 0.49803922, 1), Color(1, 0, 0.24705882, 1), Color(1, 0, 0, 1), Color(1, 0, 0.24705882, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DifficultyMenuContainer/Back2:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 2, 1),
+"update": 0,
+"values": [Color(1, 0, 0.24705882, 1), Color(1, 0, 0.49803922, 1), Color(1, 0, 0.24705882, 1), Color(1, 0, 0, 1), Color(1, 0, 0.24705882, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ekxnf"]
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bqqt6"]
+_data = {
+&"RESET": SubResource("Animation_ekxnf"),
+&"pulse": SubResource("Animation_l6cm7")
+}
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_bqqt6")
+metadata/_edit_use_anchors_ = true
+
+[node name="MainMenuContainer" type="VBoxContainer" parent="."]
+modulate = Color(1, 0, 0.000881245, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0987654
+offset_bottom = 6.1035156e-05
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Spacer64" type="Control" parent="MainMenuContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MainMenuContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "Insert Game Title!"
+label_settings = ExtResource("1_l6cm7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer32" type="Control" parent="MainMenuContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="Play" type="Label" parent="MainMenuContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "play"
+label_settings = ExtResource("2_ekxnf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer32_2" type="Control" parent="MainMenuContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="Tutorial" type="Label" parent="MainMenuContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "tutorial"
+label_settings = ExtResource("2_ekxnf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer32_3" type="Control" parent="MainMenuContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="Quit" type="Label" parent="MainMenuContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "quit"
+label_settings = ExtResource("2_ekxnf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayMenuContainer" type="VBoxContainer" parent="."]
+visible = false
+modulate = Color(1, 0, 0.000881245, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0987654
+offset_bottom = 6.1035156e-05
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Spacer64" type="Control" parent="PlayMenuContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+
+[node name="Select" type="Label" parent="PlayMenuContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "Select Boss"
+label_settings = ExtResource("1_l6cm7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer32" type="Control" parent="PlayMenuContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="Boss1" type="Label" parent="PlayMenuContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "Boss 1"
+label_settings = ExtResource("2_ekxnf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer32_2" type="Control" parent="PlayMenuContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="Boss2" type="Label" parent="PlayMenuContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "Boss 2"
+label_settings = ExtResource("2_ekxnf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer32_3" type="Control" parent="PlayMenuContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="Back" type="Label" parent="PlayMenuContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "Back"
+label_settings = ExtResource("2_ekxnf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DifficultyMenuContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0987654
+offset_right = 65.0
+offset_bottom = 6.1035156e-05
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Spacer64" type="Control" parent="DifficultyMenuContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+
+[node name="Select" type="Label" parent="DifficultyMenuContainer"]
+modulate = Color(1, 0, 0.000881245, 1)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "Select Difficulty"
+label_settings = ExtResource("1_l6cm7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer24" type="Control" parent="DifficultyMenuContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Hard" type="Label" parent="DifficultyMenuContainer"]
+modulate = Color(0.7490196, 0, 0, 1)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "Hard"
+label_settings = ExtResource("2_ekxnf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer24_2" type="Control" parent="DifficultyMenuContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Medium" type="Label" parent="DifficultyMenuContainer"]
+modulate = Color(1, 0.49803922, 0, 1)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "Medium"
+label_settings = ExtResource("2_ekxnf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer24_3" type="Control" parent="DifficultyMenuContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Easy" type="Label" parent="DifficultyMenuContainer"]
+modulate = Color(0, 0.7490196, 0, 1)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "Easy"
+label_settings = ExtResource("2_ekxnf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer24_4" type="Control" parent="DifficultyMenuContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Back2" type="Label" parent="DifficultyMenuContainer"]
+modulate = Color(1, 0, 0.000881245, 1)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "Back"
+label_settings = ExtResource("2_ekxnf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_bqqt6")
+}
+speed_scale = 0.5
+
+[node name="FadeoutRect" type="ColorRect" parent="." groups=["fadeout_rect"]]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+script = ExtResource("4_wu84c")
+fading_in = true
+
+[connection signal="mouse_entered" from="MainMenuContainer/Play" to="." method="_on_play_mouse_entered"]
+[connection signal="mouse_exited" from="MainMenuContainer/Play" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="MainMenuContainer/Tutorial" to="." method="_on_tutorial_mouse_entered"]
+[connection signal="mouse_exited" from="MainMenuContainer/Tutorial" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="MainMenuContainer/Quit" to="." method="_on_quit_mouse_entered"]
+[connection signal="mouse_exited" from="MainMenuContainer/Quit" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="PlayMenuContainer/Boss1" to="." method="_on_boss_1_mouse_entered"]
+[connection signal="mouse_exited" from="PlayMenuContainer/Boss1" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="PlayMenuContainer/Boss2" to="." method="_on_boss_2_mouse_entered"]
+[connection signal="mouse_exited" from="PlayMenuContainer/Boss2" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="PlayMenuContainer/Back" to="." method="_on_back_mouse_entered"]
+[connection signal="mouse_exited" from="PlayMenuContainer/Back" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="DifficultyMenuContainer/Hard" to="." method="_on_hard_mouse_entered"]
+[connection signal="mouse_exited" from="DifficultyMenuContainer/Hard" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="DifficultyMenuContainer/Medium" to="." method="_on_medium_mouse_entered"]
+[connection signal="mouse_exited" from="DifficultyMenuContainer/Medium" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="DifficultyMenuContainer/Easy" to="." method="_on_easy_mouse_entered"]
+[connection signal="mouse_exited" from="DifficultyMenuContainer/Easy" to="." method="_on_button_mouse_exited"]
+[connection signal="mouse_entered" from="DifficultyMenuContainer/Back2" to="." method="_on_back_2_mouse_entered"]
+[connection signal="mouse_exited" from="DifficultyMenuContainer/Back2" to="." method="_on_button_mouse_exited"]

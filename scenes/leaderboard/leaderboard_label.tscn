@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvx43ajt3r266"]
+
+[ext_resource type="LabelSettings" uid="uid://bm82a0tqpn2pj" path="res://resources/labelsettings/leaderboard_label_settings.tres" id="1_7jnqf"]
+
+[node name="LeaderboardLabel" type="Label"]
+offset_right = 1.0
+offset_bottom = 41.0
+size_flags_horizontal = 6
+text = "Text"
+label_settings = ExtResource("1_7jnqf")
+horizontal_alignment = 1
+clip_text = true
+text_overrun_behavior = 3

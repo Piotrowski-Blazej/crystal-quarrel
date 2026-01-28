@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://bm82a0tqpn2pj"]
+
+[ext_resource type="FontFile" uid="uid://dsb6robiiiisa" path="res://sprites/fonts/Silkscreen-Regular.ttf" id="1_isshy"]
+
+[resource]
+font = ExtResource("1_isshy")
+font_size = 32
+shadow_size = 0

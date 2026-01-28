@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://bcbxyaetr1b80"]
+
+[ext_resource type="Texture2D" uid="uid://b2ylru6nfjj31" path="res://sprites/Circle.png" id="1_x4bvt"]
+[ext_resource type="Script" uid="uid://lne3h3p30m51" path="res://resources/particle_explosion.gd" id="2_fd846"]
+
+[sub_resource type="Curve" id="Curve_fd846"]
+_data = [Vector2(0, 0.75), 0.0, 0.0, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 0.5), 0.0, 0.0, 0, 0, Vector2(0.9, 0.2), 0.18, 0.0, 0, 0, Vector2(1, 0), 0.18, 0.0, 0, 0]
+point_count = 5
+
+[node name="BulletExplosion" type="CPUParticles2D"]
+z_index = -4
+z_as_relative = false
+emitting = false
+amount = 32
+texture = ExtResource("1_x4bvt")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 300.0
+scale_amount_min = 0.2
+scale_amount_max = 0.4
+scale_amount_curve = SubResource("Curve_fd846")
+script = ExtResource("2_fd846")
+
+[node name="Lifetime" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Lifetime" to="." method="_on_lifetime_timeout"]

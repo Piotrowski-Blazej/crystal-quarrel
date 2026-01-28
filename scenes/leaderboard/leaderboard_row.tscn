@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://xh450jklgov2"]
+
+[ext_resource type="Script" uid="uid://b8gnguxudk51j" path="res://scripts/leaderboard_row.gd" id="1_02r5i"]
+
+[node name="LeaderboardRow" type="HBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_02r5i")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

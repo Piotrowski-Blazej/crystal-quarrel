@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://ddgj3uubfus7u"]
+
+[ext_resource type="Script" uid="uid://ces7vu44tfsmw" path="res://scripts/fading_sprite.gd" id="1_reolx"]
+
+[node name="FadingSprite" type="Sprite2D"]
+z_index = -5
+z_as_relative = false
+script = ExtResource("1_reolx")

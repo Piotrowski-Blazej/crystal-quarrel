@@ -1,0 +1,331 @@
+[gd_scene load_steps=9 format=3 uid="uid://dkis8ck6wvh6x"]
+
+[ext_resource type="Script" uid="uid://bkfqb7wyims3o" path="res://scripts/win_screen.gd" id="1_e41g7"]
+[ext_resource type="Script" uid="uid://ctsla76hdypqt" path="res://scripts/fadeout_rect.gd" id="1_erk2x"]
+[ext_resource type="LabelSettings" uid="uid://budx537sjqctb" path="res://resources/labelsettings/main_menu_title.tres" id="2_2l6cc"]
+[ext_resource type="LabelSettings" uid="uid://bi7ww3dqurkv1" path="res://resources/labelsettings/play.tres" id="3_2l6cc"]
+[ext_resource type="LabelSettings" uid="uid://bj4mv74x0pq2n" path="res://resources/labelsettings/name_input_label_settings.tres" id="5_0lrm4"]
+
+[sub_resource type="Animation" id="Animation_0lrm4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VBoxContainer/Congrats:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_e41g7"]
+resource_name = "fade_in"
+length = 8.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VBoxContainer/Congrats:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("VBoxContainer/Difficulty:self_modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(2, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("VBoxContainer/Time:self_modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(3, 4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("VBoxContainer/Continue:self_modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(7, 8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.25]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("VBoxContainer/Boss:self_modulate:a")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("VBoxContainer/DamageTaken:self_modulate:a")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(4, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("VBoxContainer/HitsParried:self_modulate:a")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(5, 6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("VBoxContainer/AddScoreContainer:modulate:a")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(6, 7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6s1kg"]
+_data = {
+&"RESET": SubResource("Animation_0lrm4"),
+&"fade_in": SubResource("Animation_e41g7")
+}
+
+[node name="WinScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e41g7")
+
+[node name="FadeoutRect" type="ColorRect" parent="." groups=["fadeout_rect"]]
+z_index = 10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+script = ExtResource("1_erk2x")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Spacer64" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+
+[node name="Congrats" type="Label" parent="VBoxContainer"]
+modulate = Color(1, 0, 0.21166931, 1)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "Congrats!"
+label_settings = ExtResource("2_2l6cc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer24" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Boss" type="Label" parent="VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "Boss beaten: "
+label_settings = ExtResource("3_2l6cc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Difficulty" type="Label" parent="VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "Difficulty: "
+label_settings = ExtResource("3_2l6cc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Time" type="Label" parent="VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "Time:"
+label_settings = ExtResource("3_2l6cc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DamageTaken" type="Label" parent="VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "Damage Taken:"
+label_settings = ExtResource("3_2l6cc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HitsParried" type="Label" parent="VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "Hits Parried: "
+label_settings = ExtResource("3_2l6cc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer24_2" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="AddScoreContainer" type="VBoxContainer" parent="VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="AddScoreLabel" type="Label" parent="VBoxContainer/AddScoreContainer"]
+self_modulate = Color(1, 1, 1, 0.2509804)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "Press shift to save score"
+label_settings = ExtResource("3_2l6cc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameInput" type="LineEdit" parent="VBoxContainer/AddScoreContainer"]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(690, 48)
+layout_mode = 2
+alignment = 1
+max_length = 40
+flat = true
+
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/AddScoreContainer/NameInput"]
+custom_minimum_size = Vector2(690, 48)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.49803922, 0.49803922, 0.1254902)
+
+[node name="NameLabel" type="Label" parent="VBoxContainer/AddScoreContainer/NameInput"]
+self_modulate = Color(1, 1, 1, 0.2509804)
+custom_minimum_size = Vector2(690, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -345.0
+offset_top = -36.0
+offset_right = 345.0
+offset_bottom = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Input name"
+label_settings = ExtResource("5_0lrm4")
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="SaveButtonLabel" type="Label" parent="VBoxContainer/AddScoreContainer"]
+visible = false
+self_modulate = Color(1, 0.49803922, 0.49803922, 1)
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+text = "Save"
+label_settings = ExtResource("5_0lrm4")
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="SaveButton" type="Button" parent="VBoxContainer/AddScoreContainer/SaveButtonLabel"]
+custom_minimum_size = Vector2(140, 48)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -24.0
+offset_right = 64.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Continue" type="Label" parent="VBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+mouse_filter = 0
+text = "
+Press escape to continue"
+label_settings = ExtResource("3_2l6cc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_6s1kg")
+}
+
+[connection signal="editing_toggled" from="VBoxContainer/AddScoreContainer/NameInput" to="." method="_on_name_input_editing_toggled"]
+[connection signal="text_changed" from="VBoxContainer/AddScoreContainer/NameInput" to="." method="_on_nameinput_text_changed"]
+[connection signal="pressed" from="VBoxContainer/AddScoreContainer/SaveButtonLabel/SaveButton" to="." method="_on_save_button_pressed"]

@@ -1,0 +1,66 @@
+[gd_scene load_steps=7 format=3 uid="uid://vnsd3vl5vxvc"]
+
+[ext_resource type="PackedScene" uid="uid://d0ix5fvxfagok" path="res://scenes/player.tscn" id="1_0wfyh"]
+[ext_resource type="Environment" uid="uid://pgfs1uurpsy6" path="res://resources/world_enviorment.tres" id="1_sugp2"]
+[ext_resource type="Texture2D" uid="uid://b2ylru6nfjj31" path="res://sprites/Circle.png" id="2_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://dgs2gn5rx5i18" path="res://scenes/bossbar.tscn" id="5_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cq6io0kh4oiju" path="res://scenes/bosses/boss_2.tscn" id="5_tefeu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0wfyh"]
+size = Vector2(700, 4696)
+
+[node name="WorldCenter" type="Node2D" groups=["world_center"]]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_sugp2")
+
+[node name="Player" parent="." instance=ExtResource("1_0wfyh")]
+position = Vector2(-806, -87)
+
+[node name="Border" type="StaticBody2D" parent="." groups=["wall"]]
+z_index = -1
+z_as_relative = false
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Border"]
+color = Color(1, 0, 0, 1)
+invert_enabled = true
+polygon = PackedVector2Array(2048, 2048, 2048, -2048, -2048, -2048, -2048, 2048)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Border"]
+visible = false
+position = Vector2(2398, 0)
+shape = SubResource("RectangleShape2D_0wfyh")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Border"]
+visible = false
+position = Vector2(-2398, 0)
+shape = SubResource("RectangleShape2D_0wfyh")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Border"]
+visible = false
+position = Vector2(0, -2398)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_0wfyh")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Border"]
+visible = false
+position = Vector2(0, 2398)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_0wfyh")
+
+[node name="CenterCircle" type="Sprite2D" parent="."]
+visible = false
+self_modulate = Color(1, 0, 0, 1)
+z_index = -10
+z_as_relative = false
+texture = ExtResource("2_0wfyh")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Bossbar" parent="UI" instance=ExtResource("5_tbgi4")]
+offset_left = -576.0
+offset_right = 448.0
+
+[node name="Boss2" parent="." instance=ExtResource("5_tefeu")]
+position = Vector2(381, -61)

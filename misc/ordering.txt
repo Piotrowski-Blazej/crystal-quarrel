@@ -1,0 +1,9 @@
+-10 that one circle in the middle lol
+-6 warnings
+-5 trails
+-4 particles
+-3 enemies
+-2 bullets
+-1 walls
+0 player
+1 huge lasers
