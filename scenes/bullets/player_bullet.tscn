@@ -12,8 +12,6 @@ z_as_relative = false
 collision_layer = 4
 collision_mask = 9
 script = ExtResource("1_46jqs")
-damage = 8000
-strong = true
 
 [node name="Circle" type="Sprite2D" parent="."]
 self_modulate = Color(0, 1, 0, 1)
