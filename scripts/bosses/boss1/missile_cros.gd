@@ -24,6 +24,8 @@ func _ready() -> void:
 	world_center = get_tree().get_first_node_in_group("world_center")
 	
 	match GlobalValues.difficulty:
+		3:
+			missile_travel_time = 2.5
 		0:
 			missile_travel_time = 1.5
 		1:
@@ -36,7 +38,7 @@ func enter():
 	animation_player.play("rotate_barriers")
 	
 	fire()
-	await get_tree().create_timer(WAIT_TIME).timeout
+	await get_tree().create_timer(WAIT_TIME+missile_travel_time+0.5).timeout
 	finish()
 
 const dist:int = 800

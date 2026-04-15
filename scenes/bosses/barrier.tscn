@@ -205,7 +205,6 @@ color = Color(0, 1, 1, 1)
 
 [node name="ShatterSfx" type="AudioStreamPlayer2D" parent="ShatterEffects"]
 stream = ExtResource("7_lb7dv")
-volume_db = 4.0
 pitch_scale = 0.5
 max_distance = 5000.0
 max_polyphony = 4

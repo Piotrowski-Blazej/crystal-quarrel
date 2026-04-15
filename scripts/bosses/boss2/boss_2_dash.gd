@@ -13,7 +13,11 @@ var dash_amount_range = Vector2i(3,4)
 @export var turrets:Array[Sprite2D]
 
 func _ready() -> void:
-	if GlobalValues.difficulty == 0:
+	if GlobalValues.difficulty == 3:
+		initial_dash_delay = 1.5
+		dash_delay = 1.0
+		shooting_c = 0.2
+	elif GlobalValues.difficulty == 0:
 		initial_dash_delay = 1.25
 		shooting_c = 0.15
 	elif GlobalValues.difficulty == 1:
@@ -48,7 +52,7 @@ func on_misc_timer_timeout():
 		for turret in turrets:
 			turret.fire()
 
-var attack_pool:Array = ["bulletwall","homingbullethell"]
+var attack_pool:Array = ["bulletwall","homingbullethell","quickmissiles"]
 func finish():
 	misc_timer.stop()
 	dash_amount -= 1
@@ -57,11 +61,14 @@ func finish():
 	else:
 		await get_tree().create_timer(dash_delay).timeout
 		if $"..".current_state == self:
-			var chosen_attack = attack_pool.pick_random()
-			while chosen_attack == $"..".last_attack:
-				chosen_attack = attack_pool.pick_random()
-			
-			Transitioned.emit(self,chosen_attack)
+			if boss.waiting_for_fastball_attack:
+				Transitioned.emit(self,"homingfastball")
+			else:
+				var chosen_attack = attack_pool.pick_random()
+				while chosen_attack == $"..".last_attack:
+					chosen_attack = attack_pool.pick_random()
+				
+				Transitioned.emit(self,chosen_attack)
 
 func exit():
 	dash_amount = 1
@@ -80,4 +87,6 @@ func _on_boss_2_enter_phase_2() -> void:
 		dash_delay = 0.35
 	elif GlobalValues.difficulty == 0:
 		dash_delay = 0.5
+	elif GlobalValues.difficulty == 3:
+		dash_delay = 0.75
 	attack_pool = ["quicklasers","homingbullethell","quickmissiles","quickcuts"]

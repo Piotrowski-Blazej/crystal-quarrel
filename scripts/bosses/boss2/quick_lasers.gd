@@ -29,7 +29,11 @@ var player:RigidBody2D
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
 	
-	if GlobalValues.difficulty == 0: 
+	if GlobalValues.difficulty == 3:
+		turn_time = 3
+		warn_time = 1.2
+		turn_amount_range = Vector2i(3,4)
+	elif GlobalValues.difficulty == 0: 
 		turn_time = 2
 		warn_time = 0.8
 		turn_amount_range = Vector2i(4,5)
@@ -113,8 +117,11 @@ func update(delta:float):
 func finish():
 	var attack_pool:Array = ["boss2dash","homingbullethell","quickmissiles","quickcuts"]
 	if $"..".current_state == self:
-		var chosen_attack = attack_pool.pick_random()
-		while chosen_attack == $"..".last_attack:
-			chosen_attack = attack_pool.pick_random()
-		
-		Transitioned.emit(self,chosen_attack)
+		if boss.waiting_for_fastball_attack:
+			Transitioned.emit(self,"homingfastball")
+		else:
+			var chosen_attack = attack_pool.pick_random()
+			while chosen_attack == $"..".last_attack:
+				chosen_attack = attack_pool.pick_random()
+			
+			Transitioned.emit(self,chosen_attack)

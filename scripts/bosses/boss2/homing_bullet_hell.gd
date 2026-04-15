@@ -27,7 +27,14 @@ var offset_min_max = 0.2
 var player_direction:float
 
 func _ready() -> void:
-	if GlobalValues.difficulty == 0:
+	if GlobalValues.difficulty == 3:
+		shooting_c = 0.5
+		parry_chance = 10
+		homing_shooting_c = 3
+		homing_parry_chance = 100
+		homing_bullet_velocity = 11
+		homing_bullet_accel = 0.35
+	elif GlobalValues.difficulty == 0:
 		shooting_c = 0.4
 		parry_chance = 10
 		homing_shooting_c = 3
@@ -94,7 +101,7 @@ func on_misc_timer_2_timeout():
 		for turret in turrets:
 			turret.set_rot_target(player_direction + randf_range(-offset_min_max,offset_min_max)*PI)
 
-var attack_pool:Array = ["boss2dash","bulletwall"]
+var attack_pool:Array = ["boss2dash","bulletwall","quickmissiles"]
 func finish():
 	misc_timer.stop()
 	misc_timer_2.stop()
@@ -102,11 +109,14 @@ func finish():
 	await get_tree().create_timer(wait_time).timeout
 	
 	if $"..".current_state == self:
-		var chosen_attack = attack_pool.pick_random()
-		while chosen_attack == $"..".last_attack:
-			chosen_attack = attack_pool.pick_random()
-		
-		Transitioned.emit(self,chosen_attack)
+		if boss.waiting_for_fastball_attack:
+			Transitioned.emit(self,"homingfastball")
+		else:
+			var chosen_attack = attack_pool.pick_random()
+			while chosen_attack == $"..".last_attack:
+				chosen_attack = attack_pool.pick_random()
+			
+			Transitioned.emit(self,chosen_attack)
 
 func exit():
 	can_fire = false
@@ -129,6 +139,6 @@ func _on_boss_2_enter_phase_2() -> void:
 		homing_shooting_c = 1.5
 		homing_bullet_velocity = 15
 		homing_bullet_accel = 0.5
-	elif GlobalValues.difficulty == 0:
+	elif GlobalValues.difficulty == 0 or GlobalValues.difficulty == 3:
 		shooting_c = 0.3
 		homing_shooting_c = 2.5

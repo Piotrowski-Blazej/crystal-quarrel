@@ -1,0 +1,892 @@
+[gd_scene load_steps=53 format=3 uid="uid://d36mhrxex247u"]
+
+[ext_resource type="Script" uid="uid://c2yntcd6tfhvh" path="res://scripts/tutorial.gd" id="1_pq5pk"]
+[ext_resource type="PhysicsMaterial" uid="uid://03r51pljyqkj" path="res://resources/no_friction.tres" id="2_8egte"]
+[ext_resource type="Environment" uid="uid://pgfs1uurpsy6" path="res://resources/world_enviorment.tres" id="2_cnowu"]
+[ext_resource type="LabelSettings" uid="uid://bi7ww3dqurkv1" path="res://resources/labelsettings/play.tres" id="2_du028"]
+[ext_resource type="Script" uid="uid://bge51av7y564f" path="res://scripts/tutorial/tutorial_player.gd" id="3_du028"]
+[ext_resource type="Script" uid="uid://t7xdcg488tyg" path="res://scripts/tutorial/tutorial_label.gd" id="3_oaloq"]
+[ext_resource type="Script" uid="uid://d2274jdxdyuxv" path="res://scripts/tutorial_fadeout_rect.gd" id="4_dmayv"]
+[ext_resource type="Script" uid="uid://2gndo3hsdo3e" path="res://scripts/look_at_mouse.gd" id="4_oaloq"]
+[ext_resource type="Texture2D" uid="uid://b2ylru6nfjj31" path="res://sprites/Circle.png" id="5_dmayv"]
+[ext_resource type="Texture2D" uid="uid://bv0g3ito4uc25" path="res://sprites/light.png" id="6_jbu7h"]
+[ext_resource type="Script" uid="uid://bxgog21pi100y" path="res://scripts/player_laser_cast.gd" id="7_cnowu"]
+[ext_resource type="Script" uid="uid://2wmyx8xmu2pc" path="res://scripts/camera.gd" id="8_uhopj"]
+[ext_resource type="AudioStream" uid="uid://beuuc6wnwcwro" path="res://sounds/glass_shatter_1.wav" id="9_kwu2s"]
+[ext_resource type="AudioStream" uid="uid://dwfvh83yj0em" path="res://sounds/glass_shatter_4.wav" id="10_rm2qi"]
+[ext_resource type="AudioStream" uid="uid://bipxm32uv1r0o" path="res://sounds/big_laser.wav" id="12_0ouew"]
+[ext_resource type="PackedScene" uid="uid://i70sc8k1v8at" path="res://scenes/player_healthbar.tscn" id="13_rx85f"]
+[ext_resource type="StyleBox" uid="uid://b7k03rfoi4n0w" path="res://resources/playerbar_fill.tres" id="14_d6d6i"]
+[ext_resource type="Texture2D" uid="uid://cnpuxwlp1jsd3" path="res://sprites/HollowCircle.png" id="15_a5v6o"]
+[ext_resource type="AudioStream" uid="uid://cju77uqdyi0x0" path="res://sounds/wooden_hit_1.wav" id="15_cnowu"]
+[ext_resource type="PackedScene" uid="uid://cumyrfagsw8lo" path="res://scenes/tutorial/tutorial_bullet_spawner.tscn" id="19_jbu7h"]
+
+[sub_resource type="Animation" id="Animation_dmayv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Area1/Bullet:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-1024, -1024)]
+}
+
+[sub_resource type="Animation" id="Animation_oaloq"]
+resource_name = "move_bullet(dash)"
+length = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Area1/Bullet:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-1024, -1024), Vector2(-768, -1024)]
+}
+
+[sub_resource type="Animation" id="Animation_jbu7h"]
+resource_name = "move_bullet_slow(dash)"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Area1/Bullet:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-768, -1024), Vector2(2048, -1024)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jbu7h"]
+_data = {
+&"RESET": SubResource("Animation_dmayv"),
+&"move_bullet(dash)": SubResource("Animation_oaloq"),
+&"move_bullet_slow(dash)": SubResource("Animation_jbu7h")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dqkch"]
+radius = 38.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y4r1p"]
+radius = 39.0
+
+[sub_resource type="Curve" id="Curve_y4r1p"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.681866, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_d2wvv"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.681866, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_3v2ag"]
+_data = [Vector2(0, 0.5031847), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.681866, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Animation" id="Animation_qlg0r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rotator/Circle:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_tuyoq"]
+resource_name = "hurt"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rotator/Circle:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_dqkch"]
+resource_name = "parrying"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rotator/Circle:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(8, 1),
+"update": 0,
+"values": [Color(1, 0.49803922, 0, 1), Color(0, 1, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tuyoq"]
+_data = {
+&"RESET": SubResource("Animation_qlg0r"),
+&"hurt": SubResource("Animation_tuyoq"),
+&"parrying": SubResource("Animation_dqkch")
+}
+
+[sub_resource type="Animation" id="Animation_smehm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.45000002, 0.45000002)]
+}
+
+[sub_resource type="Animation" id="Animation_oprun"]
+resource_name = "parry"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.5, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.6, 0.6), Vector2(0.45, 0.45)]
+}
+
+[sub_resource type="Animation" id="Animation_fjrip"]
+resource_name = "pulse"
+length = 3.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.75, 1.5, 2.25, 3),
+"transitions": PackedFloat32Array(2, 1, 2, 1, 1),
+"update": 0,
+"values": [Color(0, 1, 0, 0.49803922), Color(0, 1, 0, 0.37254903), Color(0, 1, 0, 0.24705882), Color(0, 1, 0, 0.37254903), Color(0, 1, 0, 0.49803922)]
+}
+
+[sub_resource type="Animation" id="Animation_a8ls1"]
+resource_name = "successfull_parry"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.6, 0.6), Vector2(0.45, 0.45)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(3, 1),
+"update": 0,
+"values": [Color(0, 3.2944162, 0, 0.49803922), Color(0, 1, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ur7pv"]
+_data = {
+&"RESET": SubResource("Animation_smehm"),
+&"parry": SubResource("Animation_oprun"),
+&"pulse": SubResource("Animation_fjrip"),
+&"successfull_parry": SubResource("Animation_a8ls1")
+}
+
+[sub_resource type="Animation" id="Animation_3v2ag"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rotator/Circle:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.49803925]
+}
+
+[sub_resource type="Animation" id="Animation_d2wvv"]
+resource_name = "inv_anim"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rotator/Circle:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.5, 1.0, 0.5, 1.0, 0.5, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jej6c"]
+_data = {
+&"RESET": SubResource("Animation_3v2ag"),
+&"inv_anim": SubResource("Animation_d2wvv")
+}
+
+[sub_resource type="Animation" id="Animation_f1ej7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera2D:zoom")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_jej6c"]
+resource_name = "boss_2_zoom_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera2D:zoom")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.33333334, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(0.3, 0.3)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_oprun"]
+_data = {
+&"RESET": SubResource("Animation_f1ej7"),
+&"boss_2_zoom_out": SubResource("Animation_jej6c")
+}
+
+[sub_resource type="Curve" id="Curve_f1ej7"]
+_limits = [0.0, 100.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 100), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_jej6c"]
+_data = [Vector2(0, 0.75), 0.0, 0.0, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.75, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oaloq"]
+size = Vector2(256, 512)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jbu7h"]
+size = Vector2(512, 256)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cnowu"]
+size = Vector2(256, 256)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_oaloq"]
+radius = 128.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dmayv"]
+size = Vector2(512, 256)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhopj"]
+size = Vector2(128, 2304)
+
+[node name="NewTutorial" type="Node2D" groups=["world_center"]]
+script = ExtResource("1_pq5pk")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("2_cnowu")
+
+[node name="TutorialUI" type="CanvasLayer" parent="."]
+
+[node name="TutorialLabel" type="Label" parent="TutorialUI"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 82.0
+grow_horizontal = 2
+label_settings = ExtResource("2_du028")
+horizontal_alignment = 1
+autowrap_mode = 3
+script = ExtResource("3_oaloq")
+
+[node name="Timer" type="Timer" parent="TutorialUI/TutorialLabel"]
+one_shot = true
+
+[node name="FadeoutRect" type="ColorRect" parent="TutorialUI" groups=["fadeout_rect"]]
+z_index = 10
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+script = ExtResource("4_dmayv")
+
+[node name="TutorialAnimPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_jbu7h")
+}
+
+[node name="TutorialPlayer" type="RigidBody2D" parent="." groups=["player"]]
+z_as_relative = false
+collision_layer = 2
+collision_mask = 41
+physics_material_override = ExtResource("2_8egte")
+gravity_scale = 0.0
+can_sleep = false
+lock_rotation = true
+contact_monitor = true
+max_contacts_reported = 5
+linear_damp = 2.0
+script = ExtResource("3_du028")
+
+[node name="PlayerCollider" type="CollisionShape2D" parent="TutorialPlayer"]
+shape = SubResource("CircleShape2D_dqkch")
+
+[node name="SuperdashCollider" type="Area2D" parent="TutorialPlayer"]
+collision_layer = 0
+collision_mask = 8
+
+[node name="PlayerCollider" type="CollisionShape2D" parent="TutorialPlayer/SuperdashCollider"]
+shape = SubResource("CircleShape2D_dqkch")
+
+[node name="FireDetector" type="Area2D" parent="TutorialPlayer"]
+collision_layer = 0
+collision_mask = 64
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TutorialPlayer/FireDetector"]
+visible = false
+shape = SubResource("CircleShape2D_y4r1p")
+
+[node name="Rotator" type="Node2D" parent="TutorialPlayer"]
+script = ExtResource("4_oaloq")
+
+[node name="Circle" type="Sprite2D" parent="TutorialPlayer/Rotator"]
+modulate = Color(0, 1, 0, 1)
+self_modulate = Color(0, 1, 0, 0.49803925)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("5_dmayv")
+
+[node name="Firepoint" type="Node2D" parent="TutorialPlayer/Rotator"]
+position = Vector2(38, 0)
+
+[node name="LaserChargeVfx" type="CPUParticles2D" parent="TutorialPlayer/Rotator"]
+position = Vector2(38, 0)
+emitting = false
+amount = 64
+texture = ExtResource("6_jbu7h")
+one_shot = true
+emission_shape = 1
+emission_sphere_radius = 48.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+scale_amount_min = 0.01
+scale_amount_max = 0.05
+scale_amount_curve = SubResource("Curve_y4r1p")
+color = Color(1, 1, 0, 1)
+
+[node name="LaserCast" type="RayCast2D" parent="TutorialPlayer/Rotator" node_paths=PackedStringArray("line_2d", "laser_line_particles", "laser_end_particles", "laser_start_particles", "rotator", "laser_sfx")]
+position = Vector2(38, 0)
+target_position = Vector2(6000, 0)
+collision_mask = 9
+hit_from_inside = true
+collide_with_areas = true
+script = ExtResource("7_cnowu")
+line_2d = NodePath("Line2D")
+laser_line_particles = NodePath("LaserLineVfx")
+laser_end_particles = NodePath("LaserEndVfx")
+laser_start_particles = NodePath("LaserOriginVfx")
+rotator = NodePath("..")
+laser_sfx = NodePath("../../Sfx/LaserSfx")
+
+[node name="Line2D" type="Line2D" parent="TutorialPlayer/Rotator/LaserCast"]
+visible = false
+points = PackedVector2Array(0, 0, -200, 0)
+width = 30.0
+default_color = Color(1.8247963, 1.8247963, 0, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+round_precision = 32
+antialiased = true
+
+[node name="LaserOriginVfx" type="CPUParticles2D" parent="TutorialPlayer/Rotator/LaserCast"]
+position = Vector2(2.6226828e-06, 0)
+rotation = -1.5707964
+scale = Vector2(1.6666666, 1.6666666)
+emitting = false
+amount = 64
+texture = ExtResource("6_jbu7h")
+lifetime = 0.75
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+scale_amount_min = 0.04
+scale_amount_max = 0.2
+scale_amount_curve = SubResource("Curve_d2wvv")
+color = Color(1, 1, 0, 1)
+
+[node name="LaserLineVfx" type="CPUParticles2D" parent="TutorialPlayer/Rotator/LaserCast"]
+position = Vector2(-100, 0)
+rotation = 3.1415925
+emitting = false
+amount = 512
+texture = ExtResource("6_jbu7h")
+lifetime = 0.75
+emission_shape = 3
+emission_rect_extents = Vector2(100, 18)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+scale_amount_min = 0.02
+scale_amount_max = 0.1
+scale_amount_curve = SubResource("Curve_3v2ag")
+color = Color(1, 1, 0, 1)
+
+[node name="LaserEndVfx" type="CPUParticles2D" parent="TutorialPlayer/Rotator/LaserCast"]
+position = Vector2(-200.00002, 0)
+rotation = -1.5707964
+scale = Vector2(1.6666666, 1.6666666)
+emitting = false
+amount = 64
+texture = ExtResource("6_jbu7h")
+lifetime = 0.75
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+scale_amount_min = 0.04
+scale_amount_max = 0.2
+scale_amount_curve = SubResource("Curve_d2wvv")
+color = Color(1, 1, 0, 1)
+
+[node name="Camera2D" type="Camera2D" parent="TutorialPlayer" groups=["camera"]]
+zoom = Vector2(0.5, 0.5)
+script = ExtResource("8_uhopj")
+
+[node name="Timers" type="Node" parent="TutorialPlayer"]
+
+[node name="DashCooldown" type="Timer" parent="TutorialPlayer/Timers"]
+wait_time = 0.25
+one_shot = true
+
+[node name="ShootingCooldown" type="Timer" parent="TutorialPlayer/Timers"]
+one_shot = true
+autostart = true
+
+[node name="ParryC" type="Timer" parent="TutorialPlayer/Timers"]
+wait_time = 0.5
+one_shot = true
+
+[node name="FadingSpriteC" type="Timer" parent="TutorialPlayer/Timers"]
+wait_time = 0.05
+autostart = true
+
+[node name="IFrames" type="Timer" parent="TutorialPlayer/Timers"]
+wait_time = 0.5
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="TutorialPlayer"]
+libraries = {
+&"": SubResource("AnimationLibrary_tuyoq")
+}
+
+[node name="AudioListener2D" type="AudioListener2D" parent="TutorialPlayer"]
+
+[node name="Sfx" type="Node2D" parent="TutorialPlayer"]
+
+[node name="HurtSfx" type="AudioStreamPlayer2D" parent="TutorialPlayer/Sfx"]
+process_mode = 3
+stream = ExtResource("9_kwu2s")
+volume_db = -14.0
+max_polyphony = 5
+bus = &"SFX"
+
+[node name="SuperdashHitSfx" type="AudioStreamPlayer2D" parent="TutorialPlayer/Sfx"]
+process_mode = 3
+stream = ExtResource("10_rm2qi")
+pitch_scale = 0.9
+max_polyphony = 5
+bus = &"SFX"
+
+[node name="ParrySfx" type="AudioStreamPlayer2D" parent="TutorialPlayer/Sfx"]
+stream = ExtResource("15_cnowu")
+volume_db = -2.0
+pitch_scale = 1.5
+max_polyphony = 3
+bus = &"Reverb"
+
+[node name="LaserSfx" type="AudioStreamPlayer2D" parent="TutorialPlayer/Sfx"]
+scale = Vector2(0.8, 1e-05)
+stream = ExtResource("12_0ouew")
+volume_db = -4.0
+max_distance = 10000.0
+bus = &"BigLaser"
+
+[node name="Healthbar" parent="TutorialPlayer" instance=ExtResource("13_rx85f")]
+offset_left = -64.0
+offset_top = -80.0
+offset_right = 64.0
+offset_bottom = -64.0
+theme_override_styles/fill = ExtResource("14_d6d6i")
+
+[node name="ParryRingClip" type="TextureProgressBar" parent="TutorialPlayer"]
+clip_children = 1
+custom_minimum_size = Vector2(100, 100)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 10.0
+fill_mode = 4
+texture_progress = ExtResource("5_dmayv")
+
+[node name="ParryCharge" type="Sprite2D" parent="TutorialPlayer/ParryRingClip"]
+self_modulate = Color(1, 1, 1, 0)
+position = Vector2(127.5, 127.5)
+scale = Vector2(0.45000002, 0.45000002)
+texture = ExtResource("15_a5v6o")
+
+[node name="ParryChargePulse" type="AnimationPlayer" parent="TutorialPlayer/ParryRingClip/ParryCharge"]
+libraries = {
+&"": SubResource("AnimationLibrary_ur7pv")
+}
+
+[node name="InvincibilityAnimation" type="AnimationPlayer" parent="TutorialPlayer"]
+libraries = {
+&"": SubResource("AnimationLibrary_jej6c")
+}
+
+[node name="CameraAnimPlayer" type="AnimationPlayer" parent="TutorialPlayer"]
+libraries = {
+&"": SubResource("AnimationLibrary_oprun")
+}
+
+[node name="KillParticleExplosion" type="CPUParticles2D" parent="TutorialPlayer"]
+process_mode = 3
+emitting = false
+amount = 256
+texture = ExtResource("5_dmayv")
+lifetime = 3.0
+one_shot = true
+explosiveness = 1.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 650.0
+damping_min = 15.0
+damping_max = 25.0
+damping_curve = SubResource("Curve_f1ej7")
+scale_amount_min = 0.1
+scale_amount_max = 0.3
+scale_amount_curve = SubResource("Curve_jej6c")
+color = Color(0, 1, 0, 1)
+
+[node name="ParryEffect" type="Sprite2D" parent="TutorialPlayer"]
+self_modulate = Color(0, 1, 0, 0)
+scale = Vector2(0.45000002, 0.45000002)
+texture = ExtResource("15_a5v6o")
+
+[node name="ParryEffectAnim" type="AnimationPlayer" parent="TutorialPlayer/ParryEffect"]
+libraries = {
+&"": SubResource("AnimationLibrary_ur7pv")
+}
+
+[node name="BulletHolder" type="Node2D" parent="." groups=["bullet_holder"]]
+
+[node name="Area1" type="Node2D" parent="."]
+
+[node name="Border" type="RigidBody2D" parent="Area1"]
+collision_mask = 2
+gravity_scale = 0.0
+freeze = true
+freeze_mode = 1
+contact_monitor = true
+max_contacts_reported = 1
+
+[node name="Polygon2D" type="Polygon2D" parent="Area1/Border"]
+color = Color(1, 0, 0, 1)
+polygon = PackedVector2Array(-640, -640, -640, 640, 640, 640, 640, 128, 1920, 128, 1920, -1152, -128, -1152, -128, -1664, -640, -1664, -640, -1408, -896, -1408, -896, -1920, 128, -1920, 128, -1408, 2176, -1408, 2176, 128, 2176, 896, -896, 896, -896, -896, 1664, -896, 1664, -128, 640, -128, 640, -640)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area1/Border"]
+visible = false
+polygon = PackedVector2Array(-640, -640, -640, 640, 640, 640, 640, 128, 1920, 128, 1920, -1152, -128, -1152, -128, -1664, -640, -1664, -640, -1408, -896, -1408, -896, -1920, 128, -1920, 128, -1408, 2176, -1408, 2176, 128, 2176, 896, -896, 896, -896, -896, 1664, -896, 1664, -128, 640, -128, 640, -640)
+
+[node name="WallTunnelEntrance" type="StaticBody2D" parent="Area1"]
+position = Vector2(768, 0)
+collision_layer = 8
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Area1/WallTunnelEntrance"]
+color = Color(1, 0, 0, 1)
+polygon = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area1/WallTunnelEntrance"]
+visible = false
+shape = SubResource("RectangleShape2D_oaloq")
+
+[node name="WallPermanentCorner" type="StaticBody2D" parent="Area1"]
+position = Vector2(-768, -1280)
+collision_layer = 8
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Area1/WallPermanentCorner"]
+color = Color(1, 0, 0, 1)
+polygon = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area1/WallPermanentCorner"]
+visible = false
+position = Vector2(0, 128)
+shape = SubResource("RectangleShape2D_oaloq")
+
+[node name="WallBulletOpening" type="StaticBody2D" parent="Area1"]
+position = Vector2(-384, -1280)
+collision_layer = 8
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Area1/WallBulletOpening"]
+color = Color(1, 0, 0, 1)
+polygon = PackedVector2Array(-256, -128, 256, -128, 256, 128, -256, 128)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area1/WallBulletOpening"]
+visible = false
+shape = SubResource("RectangleShape2D_jbu7h")
+
+[node name="AreaBullet" type="Area2D" parent="Area1"]
+position = Vector2(-512, -1024)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area1/AreaBullet"]
+shape = SubResource("RectangleShape2D_cnowu")
+
+[node name="Bullet" type="Sprite2D" parent="Area1"]
+self_modulate = Color(1, 0, 0, 1)
+position = Vector2(-1024, -1024)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("5_dmayv")
+
+[node name="BulletHtibox" type="Area2D" parent="Area1/Bullet"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area1/Bullet/BulletHtibox"]
+shape = SubResource("CircleShape2D_oaloq")
+
+[node name="AreaBullet2" type="Area2D" parent="Area1"]
+position = Vector2(-384, -1536)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area1/AreaBullet2"]
+shape = SubResource("RectangleShape2D_dmayv")
+
+[node name="Area2" type="Node2D" parent="."]
+process_mode = 4
+visible = false
+
+[node name="Border" type="StaticBody2D" parent="Area2"]
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Area2/Border"]
+color = Color(1, 0, 0, 1)
+invert_enabled = true
+invert_border = 128.0
+polygon = PackedVector2Array(-1024, 1024, -1024, -1024, 1024, -1024, 1024, 1024)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2/Border"]
+visible = false
+position = Vector2(1088, 0)
+shape = SubResource("RectangleShape2D_uhopj")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2/Border"]
+visible = false
+position = Vector2(-1088, 0)
+shape = SubResource("RectangleShape2D_uhopj")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Area2/Border"]
+visible = false
+position = Vector2(0, 1088)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_uhopj")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Area2/Border"]
+visible = false
+position = Vector2(0, -1088)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_uhopj")
+
+[node name="BulletSpawners" type="Node2D" parent="Area2"]
+position = Vector2(64, 0)
+
+[node name="TestingBulletSpawner" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, -960)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner2" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, -896)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner3" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, -768)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner4" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, -640)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner5" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, -512)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner6" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, -384)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner7" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, -256)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner8" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, -128)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner9" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, 0)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner10" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, 128)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner11" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, 256)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner12" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, 384)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner13" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, 512)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner14" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, 640)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner15" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, 768)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner16" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, 896)
+rotation = -1.5707964
+
+[node name="TestingBulletSpawner17" parent="Area2/BulletSpawners" instance=ExtResource("19_jbu7h")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(960, 960)
+rotation = -1.5707964
+
+[connection signal="timeout" from="TutorialUI/TutorialLabel/Timer" to="TutorialUI/TutorialLabel" method="_on_timer_timeout"]
+[connection signal="area_entered" from="TutorialPlayer/SuperdashCollider" to="TutorialPlayer" method="_on_superdash_connection"]
+[connection signal="body_entered" from="TutorialPlayer/SuperdashCollider" to="TutorialPlayer" method="_on_superdash_connection"]
+[connection signal="timeout" from="TutorialPlayer/Timers/DashCooldown" to="TutorialPlayer" method="_on_dash_cooldown_timeout"]
+[connection signal="timeout" from="TutorialPlayer/Timers/ShootingCooldown" to="TutorialPlayer" method="_on_shooting_cooldown_timeout"]
+[connection signal="timeout" from="TutorialPlayer/Timers/ParryC" to="TutorialPlayer" method="_on_shooting_cooldown_timeout"]
+[connection signal="timeout" from="TutorialPlayer/Timers/FadingSpriteC" to="TutorialPlayer" method="_on_fading_sprite_c_timeout"]
+[connection signal="body_entered" from="Area1/Border" to="." method="misc_event"]
+[connection signal="body_entered" from="Area1/Bullet/BulletHtibox" to="." method="misc_event"]

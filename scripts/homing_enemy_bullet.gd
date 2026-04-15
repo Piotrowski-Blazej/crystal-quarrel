@@ -38,7 +38,7 @@ func _on_lifetime_timeout():
 
 func _process(delta):
 	if is_instance_valid(target):
-		if can_parry && global_position.distance_to(target.global_position) < 100:
+		if can_parry and player.parrying and global_position.distance_to(target.global_position) < 150:
 			b_velocity = global_position.direction_to(target.global_position)*max_velocity
 		else:
 			b_velocity += global_position.direction_to(target.global_position)*accel*delta*100

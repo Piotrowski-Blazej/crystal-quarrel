@@ -90,13 +90,13 @@ func filter_rows() -> void:
 		if !boss_option_pointer == 2 and !BOSS_OPTIONS[boss_option_pointer] == row.boss:
 			row.hide()
 			continue
-		if !difficulty_option_pointer == 3 and !DIFFUCULTY_OPTIONS[difficulty_option_pointer] == row.difficulty:
+		if !difficulty_option_pointer == 4 and !DIFFUCULTY_OPTIONS[difficulty_option_pointer] == row.difficulty:
 			row.hide()
 			continue
 		row.show()
 
 
-const BOSS_OPTIONS:PackedStringArray = ["Whirlwind","The\nAirship","All\nBosses"]
+const BOSS_OPTIONS:PackedStringArray = ["Whirlwind","The Airship","All\nBosses"]
 var boss_option_pointer:int = 2
 func _on_boss_button_button_up() -> void:
 	boss_option_pointer += 1
@@ -104,11 +104,11 @@ func _on_boss_button_button_up() -> void:
 	boss.text = BOSS_OPTIONS[boss_option_pointer]
 	filter_rows()
 
-const DIFFUCULTY_OPTIONS:PackedStringArray = ["Easy","Medium","Hard","All\nDifficulties"]
-var difficulty_option_pointer:int = 3
+const DIFFUCULTY_OPTIONS:PackedStringArray = ["Very Easy","Easy","Medium","Hard","All\nDifficulties"]
+var difficulty_option_pointer:int = 4
 func _on_difficulty_button_button_up() -> void:
 	difficulty_option_pointer -= 1
-	if difficulty_option_pointer == -1: difficulty_option_pointer = 3
+	if difficulty_option_pointer == -1: difficulty_option_pointer = 4
 	difficulty.text = DIFFUCULTY_OPTIONS[difficulty_option_pointer]
 	filter_rows()
 

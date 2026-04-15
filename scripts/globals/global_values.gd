@@ -8,7 +8,7 @@ var boss:CollisionObject2D
 var selected_boss = 0
 var boss_names = ["Whirlwind","The Airship"]
 var difficulty = -1
-var diff_names = ["Easy","Medium","Hard"]
+var diff_names = ["Easy","Medium","Hard","Very Easy"]
 
 var timer_on = false
 var time_elapsed:float = 0.0

@@ -1,10 +1,26 @@
 extends Node
 
+var priority_time_slow = false
+var priority_time_scale:float
+var priority_duration:float
 
-func frame_freeze(time_scale:float, duration:float):
-	if Engine.time_scale > time_scale:
+func frame_freeze(time_scale:float, duration:float, priority = false):
+	if priority:
+		priority_time_slow = true
+		priority_time_scale = time_scale
+		priority_duration = duration*time_scale
+		Engine.time_scale = time_scale
+	elif  Engine.time_scale >= time_scale:
 		Engine.time_scale = time_scale
 		await get_tree().create_timer(duration * time_scale).timeout
+		if priority_time_slow: Engine.time_scale = priority_time_scale
+		else: Engine.time_scale = 1.0
+
+func _process(delta: float) -> void:
+	if priority_duration > 0:
+		priority_duration -= delta
+	elif priority_time_slow:
+		priority_time_slow = false
 		Engine.time_scale = 1.0
 
 var bullet_particles =  preload("res://scenes/particles/bullet_explosion.tscn")
@@ -24,7 +40,17 @@ var bullet_particle_presets = {
 }
 
 var enemy_particle_presets = {
-	"light":{
+	"light_spray":{
+		"amount":32,
+		"lifetime":0.5,
+		"velocity":Vector2i(1000,2000),
+		"ang_velocity":Vector2i(64,192)
+	},"medium_spray":{
+		"amount":64,
+		"lifetime":0.5,
+		"velocity":Vector2i(1250,2500),
+		"ang_velocity":Vector2i(64,192)
+	},"light":{
 		"amount":32,
 		"lifetime":5,
 		"velocity":Vector2i(50,250),
@@ -87,6 +113,7 @@ func spawn_enemy_particles(position:Vector2, color:Color, preset:String, texture
 	i_particles.scale_amount_min = scale.x
 	i_particles.scale_amount_max = scale.y
 	
+	i_particles.lifetime = enemy_particle_presets[preset]["lifetime"]
 	i_particles.amount = enemy_particle_presets[preset]["amount"]
 	i_particles.initial_velocity_min = enemy_particle_presets[preset]["velocity"].x
 	i_particles.initial_velocity_max = enemy_particle_presets[preset]["velocity"].y

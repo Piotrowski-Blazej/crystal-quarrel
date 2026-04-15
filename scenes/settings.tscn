@@ -1,0 +1,127 @@
+[gd_scene load_steps=5 format=3 uid="uid://yk4howlsve82"]
+
+[ext_resource type="LabelSettings" uid="uid://bm82a0tqpn2pj" path="res://resources/labelsettings/leaderboard_label_settings.tres" id="1_5p8wc"]
+[ext_resource type="Script" uid="uid://b61qkbuxjug40" path="res://scripts/settings.gd" id="1_6wm04"]
+[ext_resource type="PackedScene" uid="uid://b8o7d577dc3ym" path="res://scenes/input_settings_row.tscn" id="3_es4n0"]
+[ext_resource type="Script" uid="uid://ctsla76hdypqt" path="res://scripts/fadeout_rect.gd" id="3_f4mfi"]
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_6wm04")
+
+[node name="FadeoutRect" type="ColorRect" parent="." groups=["fadeout_rect"]]
+z_index = 10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+script = ExtResource("3_f4mfi")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(1436, 940)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="RowContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="InputSettingsRow" parent="ScrollContainer/RowContainer" instance=ExtResource("3_es4n0")]
+layout_mode = 2
+
+[node name="InputSettingsRow2" parent="ScrollContainer/RowContainer" instance=ExtResource("3_es4n0")]
+layout_mode = 2
+input_name = &"move_left"
+label_text = "Move Left"
+
+[node name="InputSettingsRow3" parent="ScrollContainer/RowContainer" instance=ExtResource("3_es4n0")]
+layout_mode = 2
+input_name = &"move_down"
+label_text = "Move Down"
+
+[node name="InputSettingsRow4" parent="ScrollContainer/RowContainer" instance=ExtResource("3_es4n0")]
+layout_mode = 2
+input_name = &"move_right"
+label_text = "Move Right"
+
+[node name="InputSettingsRow5" parent="ScrollContainer/RowContainer" instance=ExtResource("3_es4n0")]
+layout_mode = 2
+input_name = &"shoot"
+label_text = "Shoot"
+
+[node name="InputSettingsRow6" parent="ScrollContainer/RowContainer" instance=ExtResource("3_es4n0")]
+layout_mode = 2
+input_name = &"parry"
+label_text = "Parry"
+
+[node name="InputSettingsRow7" parent="ScrollContainer/RowContainer" instance=ExtResource("3_es4n0")]
+layout_mode = 2
+input_name = &"dash"
+label_text = "Dash"
+
+[node name="InputSettingsRow8" parent="ScrollContainer/RowContainer" instance=ExtResource("3_es4n0")]
+layout_mode = 2
+input_name = &"heal"
+label_text = "Heal"
+
+[node name="InputSettingsRow9" parent="ScrollContainer/RowContainer" instance=ExtResource("3_es4n0")]
+layout_mode = 2
+input_name = &"superdash"
+label_text = "Superdash"
+
+[node name="InputSettingsRow10" parent="ScrollContainer/RowContainer" instance=ExtResource("3_es4n0")]
+layout_mode = 2
+input_name = &"fire_laser"
+label_text = "Fire Laser"
+
+[node name="BackButton" type="Button" parent="."]
+modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(96, 41)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -41.0
+offset_right = 48.0
+grow_horizontal = 2
+grow_vertical = 0
+flat = true
+
+[node name="BackLabel" type="Label" parent="BackButton"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -41.0
+offset_right = 48.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Back"
+label_settings = ExtResource("1_5p8wc")
+
+[connection signal="button_up" from="BackButton" to="." method="_on_back_button_button_up"]

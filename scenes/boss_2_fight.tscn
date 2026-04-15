@@ -16,7 +16,7 @@ size = Vector2(700, 4696)
 environment = ExtResource("1_jcrij")
 
 [node name="Player" parent="." instance=ExtResource("2_5ek6v")]
-position = Vector2(-806, -87)
+position = Vector2(-1024, 0)
 
 [node name="Border" type="StaticBody2D" parent="." groups=["wall"]]
 z_index = -1

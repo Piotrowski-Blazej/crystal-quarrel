@@ -18,7 +18,10 @@ var world_center:Node2D
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
 	world_center = get_tree().get_first_node_in_group("world_center")
-	if GlobalValues.difficulty == 0: 
+	if GlobalValues.difficulty == 3:
+		cut_c = 0.75
+		cut_amount_range = Vector2i(8,10)
+	elif GlobalValues.difficulty == 0: 
 		cut_c = 0.5
 		cut_amount_range = Vector2i(10,14)
 	elif GlobalValues.difficulty == 1: 
@@ -68,15 +71,17 @@ func on_misc_timer_timeout():
 var attack_pool:Array = ["quickmissiles","quicklasers","homingbullethell","boss2dash"]
 func finish():
 	if $"..".current_state == self:
-		var chosen_attack = attack_pool.pick_random()
-		while !in_phase_3 && chosen_attack == $"..".last_attack:
-			chosen_attack = attack_pool.pick_random()
-		
-		Transitioned.emit(self,chosen_attack)
+		if boss.waiting_for_fastball_attack and !boss.in_phase_3:
+			Transitioned.emit(self,"homingfastball")
+		else:
+			var chosen_attack = attack_pool.pick_random()
+			while chosen_attack == $"..".last_attack:
+				chosen_attack = attack_pool.pick_random()
+			
+			Transitioned.emit(self,chosen_attack)
 
 func exit():
 	misc_timer.stop()
-	
 	misc_timer.disconnect("timeout",on_misc_timer_timeout)
 
 func _on_boss_2_enter_phase_3() -> void:

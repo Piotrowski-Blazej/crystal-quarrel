@@ -16,6 +16,9 @@ func _ready() -> void:
 	elif GlobalValues.difficulty == 0:
 		barrier_shooting_c = 0.35;
 		shooting_c = 1
+	elif GlobalValues.difficulty == 3:
+		barrier_shooting_c = 0.5;
+		shooting_c = 1
 
 func enter():
 	barrier_anim.speed_scale = 0.2

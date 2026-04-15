@@ -5,7 +5,7 @@ var damage: int
 var kb: int
 var b_velocity: Vector2
 var can_parry
-
+var player:RigidBody2D
 
 func setup(d,k,v,c:Color,p:bool = false,s=1):
 	damage = d
@@ -14,12 +14,15 @@ func setup(d,k,v,c:Color,p:bool = false,s=1):
 	modulate = c
 	can_parry = p
 	scale *= s
+	player =  GlobalValues.player
 
 func _on_lifetime_timeout():
 	die()
 
 func _process(delta):
 	global_position += b_velocity*delta*100
+	if can_parry and player.parrying and player.global_position.distance_to(global_position) < player.PARRY_RANGE:
+		player.hit(damage,b_velocity*kb,can_parry,self)
 
 func _on_body_entered(body):
 	if body.is_in_group("player"):

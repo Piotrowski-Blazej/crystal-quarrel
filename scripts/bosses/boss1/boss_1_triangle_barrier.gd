@@ -7,7 +7,7 @@ var kb = 100
 
 var max_health:int = 1000
 var health:int = 1000
-var crack_thresholds = [850,700,550,400]#also set in the repair function (ik)
+var crack_thresholds = [750,500,250,150]#also set in the repair function (ik)
 var broken = false
 
 var contact_damage = 10
@@ -23,22 +23,28 @@ const ENEMY_MISSILE = preload("uid://1cudyanr36wk")
 @onready var cracks: TextureRect = $Triangle/Cracks
 @export var hit_sfx: AudioStreamPlayer2D
 @export var shatter_sfx: AudioStreamPlayer2D
+@onready var boss: RigidBody2D = $"../.."
 
 func _ready() -> void:
 	world_center = get_tree().get_first_node_in_group("world_center")
-	if GlobalValues.difficulty == 0:
-		max_health = 700
-		health = 700
-		crack_thresholds = [575,450,325,200]
+	if GlobalValues.difficulty == 0 or GlobalValues.difficulty == 3:
+		max_health = 800
+		health = 800
+		crack_thresholds = [600,400,200,0]
+
+func superdash_hit(damage:int, r_kb:Vector2, hit_position:Vector2, strong_attack = false):
+	hit(damage, r_kb, strong_attack)
+	boss.barrier_superdash_hit(GlobalValues.player.global_position.direction_to(boss.global_position)*r_kb.length())
+	
+	VfxManager.spawn_enemy_particles(hit_position, Color.RED, "light_spray", TRIANGLE, Vector2(0.2,0.4))
+	VfxManager.frame_freeze(0.2,0.3)
 
 func hit(damage,_kb = 0, strong_attack = false):
-	health -= damage
-	
 	while crack_thresholds.size() != 0 && health <= crack_thresholds[0]:
 		crack_thresholds.pop_front()
 		cracks.progress()
 	
-	if (crack_thresholds.is_empty() && strong_attack) or health <= 0:
+	if crack_thresholds.is_empty() and strong_attack:
 		cracks.stop_particles()
 		set_collision_layer_value(4,false)
 		triangle.self_modulate = Color(1,0,0,0.5)
@@ -50,6 +56,8 @@ func hit(damage,_kb = 0, strong_attack = false):
 		flash()
 		hit_sfx.pitch_scale = randf_range(0.6,0.8)
 		hit_sfx.play()
+	
+	health -= damage
 
 func die():
 	shatter_sfx.play()
@@ -90,8 +98,8 @@ func fire_missile(warning:Sprite2D ,r_damage = bullet_damage, r_velocity = bulle
 	i_bullet.b_velocity = velocity*1000#ik...
 
 func repair():
-	if GlobalValues.difficulty == 0: crack_thresholds = [300,250,200,150]
-	else: crack_thresholds = [425,350,275,200]
+	if GlobalValues.difficulty == 0 or GlobalValues.difficulty == 3: crack_thresholds = [375,250,125,0]
+	else: crack_thresholds = [300,200,100,0]
 	cracks.reset()
 	@warning_ignore("integer_division")
 	health = max_health/2

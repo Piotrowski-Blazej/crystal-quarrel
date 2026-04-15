@@ -30,10 +30,14 @@ func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
 	world_center = get_tree().get_first_node_in_group("world_center")
 	
-	if GlobalValues.difficulty == 0:
+	if GlobalValues.difficulty == 3:
+		warn_time = 2
+	elif GlobalValues.difficulty == 0:
 		warn_time = 1.5
 	elif GlobalValues.difficulty == 1:
 		warn_time = 1
+	elif GlobalValues.difficulty == 2:
+		warn_time = 0.75
 
 func enter():
 	misc_timer.timeout.connect(on_misc_timer_timeout)
@@ -64,7 +68,8 @@ func enter():
 	
 	boss.set_look_pos()
 	
-	await get_tree().create_timer(warn_time).timeout
+	misc_timer.start(warn_time)
+	await misc_timer.timeout
 	
 	misc_timer.start(shooting_c)
 
@@ -80,14 +85,17 @@ func on_misc_timer_timeout():
 			await get_tree().create_timer(wait_time).timeout
 			finish()
 
-var attack_pool:Array = ["quicklasers","homingbullethell","boss2dash","quickcuts"]
+var attack_pool:Array = ["bulletwall","homingbullethell","boss2dash"]
 func finish():
 	if $"..".current_state == self:
-		var chosen_attack = attack_pool.pick_random()
-		while !boss.in_phase_3 and chosen_attack == $"..".last_attack:
-			chosen_attack = attack_pool.pick_random()
-		
-		Transitioned.emit(self,chosen_attack)
+		if boss.waiting_for_fastball_attack and !boss.in_phase_3:
+			Transitioned.emit(self,"homingfastball")
+		else:
+			var chosen_attack = attack_pool.pick_random()
+			while chosen_attack == $"..".last_attack:
+				chosen_attack = attack_pool.pick_random()
+			
+			Transitioned.emit(self,chosen_attack)
 
 func exit():
 	if boss.in_phase_3:
@@ -97,6 +105,10 @@ func exit():
 	
 	misc_timer.disconnect("timeout",on_misc_timer_timeout)
 
+func _on_boss_2_enter_phase_2() -> void:
+	attack_pool = ["quicklasers","homingbullethell","boss2dash","quickcuts"]
+	if GlobalValues.difficulty == 2:
+		warn_time = 0.5
 
 func _on_boss_2_enter_phase_3() -> void:
 	attack_pool = ["quickcuts"]

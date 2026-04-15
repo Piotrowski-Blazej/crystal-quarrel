@@ -48,6 +48,9 @@ func _ready() -> void:
 		phase_2_hp = 1500
 		crack_thresholds = [2250,1500,750,0]
 		if GlobalValues.difficulty == 0: dash_speed = 900
+		elif GlobalValues.difficulty == 3:
+			dash_speed = 800
+			parriable_chance = 100
 	
 	bossbar.max_value = health
 	bossbar.value = health
@@ -55,6 +58,29 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if move_to_target && global_position.distance_to(target_position)>100:
 		apply_central_force(global_position.direction_to(target_position)*100000*movement_speed*delta)
+
+func barrier_superdash_hit(r_kb):
+	player.apply_central_impulse(global_position.direction_to(player.global_position)*player.superdash_kb*0.1)
+	if state_machine.current_state == $StateMachine/DashAttack or state_machine.current_state == $StateMachine/Phase2Dash:
+		linear_velocity = Vector2.ZERO
+		apply_central_impulse(r_kb/2)
+		VfxManager.frame_freeze(0.05,0.5)
+	else:
+		apply_central_impulse(r_kb)
+		VfxManager.frame_freeze(0.2,0.3)
+
+func superdash_hit(damage, r_kb, hit_position:Vector2, strong_attack = false):
+	player.apply_central_impulse(global_position.direction_to(player.global_position)*player.superdash_kb*0.1)
+	if state_machine.current_state == $StateMachine/DashAttack or state_machine.current_state == $StateMachine/Phase2Dash:
+		linear_velocity = Vector2.ZERO
+		hit(damage*1.5, r_kb/2, strong_attack)
+		
+		VfxManager.spawn_enemy_particles(hit_position, Color.RED, "medium_spray", CIRCLE, Vector2(0.1,0.3))
+		VfxManager.frame_freeze(0.05,0.5)
+	else:
+		VfxManager.spawn_enemy_particles(hit_position, Color.RED, "light_spray", CIRCLE, Vector2(0.1,0.2))
+		VfxManager.frame_freeze(0.2,0.3)
+		hit(damage, r_kb, strong_attack)
 
 var is_dying = false
 func hit(damage,r_kb,strong_attack = false):

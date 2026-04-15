@@ -56,7 +56,7 @@ func _process(delta: float) -> void:
 		if distance_to_target>100:
 			apply_central_force(global_position.direction_to(target_pos)*speed*delta)
 		else:
-			apply_central_force(global_position.direction_to(target_pos)*speed*delta/4)
+			apply_central_force(global_position.direction_to(target_pos)*speed*delta/2)
 	
 	if awake:
 		rotator.global_rotation_degrees += delta*180

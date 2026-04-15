@@ -19,6 +19,12 @@ const laser_duration:float = 0.5
 
 
 func _ready() -> void:
+	if GlobalValues.difficulty == 3:
+		laser_attack_speed = 2
+		laser_warn_time = 1.25
+		barrier_shooting_c = 0.5;
+		bullet_attack_speed = 1
+		parriable_chance = 100
 	if GlobalValues.difficulty == 0:
 		laser_attack_speed = 1.5
 		laser_warn_time = 1
@@ -95,7 +101,7 @@ func _on_barrier_shooting_c_timeout() -> void:
 const bullet_damage = 10
 const bullet_velocity = 10
 const kb = 100
-const parriable_chance = 40
+var parriable_chance = 40
 func _on_shooting_c_timeout() -> void:
 	boss.shoot(bullet_damage, kb, bullet_velocity, parriable_chance)
 

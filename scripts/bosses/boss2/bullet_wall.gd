@@ -25,7 +25,11 @@ var turn_amount_range = Vector2i(3,5)
 var fire_area_scale = 5
 
 func _ready() -> void:
-	if GlobalValues.difficulty == 0:
+	if GlobalValues.difficulty == 3:
+		turn_time = 2.3
+		fire_area_scale = 3
+		turn_amount_range = Vector2i(2,3)
+	elif GlobalValues.difficulty == 0:
 		turn_time = 1.7
 		fire_area_scale = 4
 		turn_amount_range = Vector2i(3,3)
@@ -110,12 +114,15 @@ func on_misc_timer_timeout():
 
 func finish():
 	if $"..".current_state == self:
-		var attack_pool:Array = ["boss2dash","homingbullethell"]
-		var chosen_attack = attack_pool.pick_random()
-		while chosen_attack == $"..".last_attack:
-			chosen_attack = attack_pool.pick_random()
-		
-		Transitioned.emit(self,chosen_attack)
+		var attack_pool:Array = ["quickmissiles"]#"boss2dash","homingbullethell","quickmissiles"]
+		if boss.waiting_for_fastball_attack:
+			Transitioned.emit(self,"homingfastball")
+		else:
+			var chosen_attack = attack_pool.pick_random()
+			while chosen_attack == $"..".last_attack:
+				chosen_attack = attack_pool.pick_random()
+			
+			Transitioned.emit(self,chosen_attack)
 
 func exit():
 	misc_timer.stop()

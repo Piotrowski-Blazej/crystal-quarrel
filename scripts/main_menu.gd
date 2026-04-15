@@ -6,6 +6,7 @@ extends Control
 
 @onready var play: Label = $MainMenuContainer/Play
 @onready var tutorial: Label = $MainMenuContainer/Tutorial
+@onready var settings: Label = $MainMenuContainer/Settings
 @onready var leaderboard: Label = $MainMenuContainer/Leaderboard
 @onready var quit: Label = $MainMenuContainer/Quit
 
@@ -19,6 +20,7 @@ extends Control
 
 @onready var difficulty_menu_container: VBoxContainer = $DifficultyMenuContainer
 
+@onready var very_easy: Label = $DifficultyMenuContainer/VeryEasy
 @onready var easy: Label = $DifficultyMenuContainer/Easy
 @onready var medium: Label = $DifficultyMenuContainer/Medium
 @onready var hard: Label = $DifficultyMenuContainer/Hard
@@ -29,12 +31,16 @@ var current_button:Control = null
 
 const BOSS_1_FIGHT = preload("uid://d374n77822n4u")
 const BOSS_2_FIGHT = preload("uid://bstiets5m38ya")
-const TUTORIAL = "res://scenes/tutorial/tutorial.tscn"
+const TUTORIAL = "res://scenes/tutorial/new_tutorial.tscn"
 const LEADERBOARD = "res://scenes/leaderboard/leaderboard.tscn"
+const SETTINGS = "res://scenes/settings.tscn"
 
 var selected_boss = BOSS_1_FIGHT
 
 func _ready() -> void:
+	GlobalValues.time_elapsed = 0.0
+	GlobalValues.damage_taken = 0
+	GlobalValues.hits_parried = 0
 	animation_player.play("pulse")
 
 func focus_button(on_off:bool):
@@ -48,6 +54,8 @@ func _process(_delta: float) -> void:
 		match current_button:
 			tutorial:
 				get_tree().change_scene_to_file(TUTORIAL)
+			settings:
+				get_tree().change_scene_to_file(SETTINGS)
 			play:
 				main_menu_container.hide()
 				play_menu_container.show()
@@ -58,7 +66,7 @@ func _process(_delta: float) -> void:
 				selected_boss = BOSS_1_FIGHT
 				play_menu_container.hide()
 				difficulty_menu_container.show()
-			boss_2: 
+			boss_2:
 				GlobalValues.selected_boss = 1
 				selected_boss = BOSS_2_FIGHT
 				play_menu_container.hide()
@@ -72,6 +80,10 @@ func _process(_delta: float) -> void:
 			easy:
 				GlobalValues.toggle_timer(true)
 				GlobalValues.difficulty = 0
+				get_tree().change_scene_to_packed(selected_boss)
+			very_easy:
+				GlobalValues.toggle_timer(true)
+				GlobalValues.difficulty = 3
 				get_tree().change_scene_to_packed(selected_boss)
 			medium:
 				GlobalValues.toggle_timer(true)
@@ -100,6 +112,10 @@ func _on_leaderboard_mouse_entered() -> void:
 	current_button = leaderboard
 	focus_button(true)
 
+func _on_settings_mouse_entered() -> void:
+	current_button = settings
+	focus_button(true)
+
 func _on_quit_mouse_entered() -> void:
 	current_button = quit
 	focus_button(true)
@@ -118,6 +134,10 @@ func _on_back_mouse_entered() -> void:
 
 func _on_easy_mouse_entered() -> void:
 	current_button = easy
+	focus_button(true)
+
+func _on_very_easy_mouse_entered() -> void:
+	current_button = very_easy
 	focus_button(true)
 
 func _on_medium_mouse_entered() -> void:

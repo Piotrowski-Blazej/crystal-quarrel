@@ -19,7 +19,12 @@ var player_direction:float
 var can_shoot = false
 
 func _ready() -> void:
-	if GlobalValues.difficulty == 0:
+	if GlobalValues.difficulty == 3:
+		homing_bullet_lifetime = 2.2
+		homing_shooting_c = 1.8
+		homing_bullet_velocity = 15
+		homing_bullet_kb = 10
+	elif GlobalValues.difficulty == 0:
 		homing_bullet_lifetime = 1.6
 		homing_shooting_c = 1.4
 		homing_bullet_velocity = 20
@@ -66,6 +71,7 @@ func finish():
 		Transitioned.emit(self,chosen_attack)
 
 func exit():
+	boss.waiting_for_fastball_attack = false
 	misc_timer.stop()
 	misc_timer.disconnect("timeout",on_misc_timer_timeout)
 	barrier.disconnect("barrier_shattered",finish)

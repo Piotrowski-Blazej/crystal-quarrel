@@ -1,47 +1,43 @@
 extends RigidBody2D
 
-@export var hurt_sfx_pitch = Vector2(0.6,1)
-@export var parry_sfx_pitch = Vector2(1.4,1.55)
+var hurt_sfx_pitch = Vector2(0.6,1)
+var parry_sfx_pitch = Vector2(1.4,1.55)
 
-@export_category("health")
-@export var max_health = 100
+var max_health = 100
 var health = 100
-@export var healing_per_charge = 5
+var healing_per_charge = 5
 var immortal = false
-@export var invincibility_time:float = 0.5
+var invincibility_time:float = 0.5
 
-@export_category("movement")
-@export var dash_to_mouse:bool  = true
+var dash_to_mouse:bool  = true
 const fading_sprite:PackedScene = preload("res://scenes/fading_sprite.tscn")
-@export var speed:int = 2000
-@export var dash_force:int = 2500
-@export var dash_c:float = 0.25
+var speed:int = 2000
+var dash_force:int = 2500
+var dash_c:float = 0.25
 
-@export_category("superdash")
-@export var superdash_force_multiplier:int = 2
-@export var superdash_damage:int = 80
-@export var superdash_kb:int = 10000
-@export var superdash_invincibility_time:float = 0.5
-@export var superdash_c:float = 1
+var superdash_force_multiplier:int = 2
+var superdash_damage:int = 80
+var superdash_kb:int = 10000
+var superdash_invincibility_time:float = 0.5
+var superdash_c:float = 1
 var is_superdashing:bool = false
 
-@export_category("bullets")
+
 const normal_bullet:PackedScene = preload("res://scenes/bullets/player_bullet.tscn")
 const heavy_bullet:PackedScene = preload("res://scenes/bullets/heavy_player_bullet.tscn")
-@export var shootingC:float = 0.2
-@export var bullet_damage:int = 50
-@export var bullet_kb:int = 25
-@export var bullet_velocity:int = 15
-@export var recoil:int = 1
+var shootingC:float = 0.2
+var bullet_damage:int = 50
+var bullet_kb:int = 25
+var bullet_velocity:int = 15
+var recoil:int = 1
 
-@export_category("laser")
-@export var charge_time:float = 1
-@export var duration:float = 0.5
-@export var duration_increase:float = 0.1
+var charge_time:float = 1
+var duration:float = 0.5
+var duration_increase:float = 0.1
 
-@export_category("parrying")
-@export var parry_duration:float = 0.3
-@export var parry_cooldown:float = 0.5
+
+var parry_duration:float = 0.3
+var parry_cooldown:float = 0.5
 var parry_charges:int = 0
 var parry_time:float
 var parrying = false
@@ -79,24 +75,30 @@ var candash = true
 
 @onready var healthbar: ProgressBar = $Healthbar
 
+@onready var tutorial_node: Node2D = $".."
+
+var can_move = true
+var can_dash = false
+var can_fire = false
+var can_parry = false
+var can_heal = false
+var can_superdash = false
+var can_laser = false
+
+var teleporting_player = true
+var teleport_destination:Vector2
+
+signal player_parried
+
 var world_center:Node2D
+var bullet_holder:Node2D
 
 func _ready() -> void:
 	world_center = get_tree().get_first_node_in_group("world_center")
+	bullet_holder = get_tree().get_first_node_in_group("bullet_holder")
 	health = max_health
 	parry_charge_pulse.play("pulse")
 	$Rotator/Circle.self_modulate = Color8(255,255,255)
-	
-	if GlobalValues.difficulty == 0 or GlobalValues.difficulty == 3:
-		health = 200
-		max_health = 200
-		healing_per_charge = 10
-	elif GlobalValues.difficulty == 1:
-		health = 160
-		max_health = 160
-		healing_per_charge = 8
-	elif GlobalValues.difficulty == -1:
-		immortal = true
 	
 	healthbar.max_value = max_health
 	healthbar.value = max_health
@@ -123,25 +125,25 @@ func _process(delta):
 	else:
 		parrying = false
 	
-	if Input.is_action_just_pressed("dash"):
+	if can_dash and Input.is_action_just_pressed("dash"):
 		if candash:
 			candash = false
 			dash()
-	if Input.is_action_just_pressed("fire_laser"):
+	if can_laser and Input.is_action_just_pressed("fire_laser"):
 		if parry_charges > 4:
 			charge_laser(charge_time)
-	if Input.is_action_just_pressed("heal"):
+	if can_heal and Input.is_action_just_pressed("heal"):
 		if parry_charges > 0:
 			heal()
-	if Input.is_action_just_pressed("superdash"):
+	if can_superdash and Input.is_action_just_pressed("superdash"):
 		if candash and parry_charges > 0:
 			parry_charges -= 1
 			parry_ring_clip.value = parry_charges
 			superdash()
-	elif Input.is_action_pressed("shoot"):
+	elif can_fire and Input.is_action_pressed("shoot"):
 		if can_shoot == true:
 			shoot()
-	if Input.is_action_just_pressed("parry"):
+	if can_parry and Input.is_action_just_pressed("parry"):
 		if parry_time <= 0 && parry_c.is_stopped():
 			parry()
 			parry_c.start(parry_cooldown)
@@ -185,6 +187,8 @@ func hit(r_damage,r_kb,r_can_parry,bullet,give_i_frames = true):
 			parry_effect_anim.play("successfull_parry")
 			candash = true
 			parry_c.stop()
+			
+			player_parried.emit()
 			if parry_charges < MAX_PARRY_CHARGES:
 				parry_charges += 1
 				parry_ring_clip.value = parry_charges
@@ -219,8 +223,9 @@ func hit(r_damage,r_kb,r_can_parry,bullet,give_i_frames = true):
 	
 	
 	if health <= 0:
-		if !immortal: die()
-		else:         health = 0
+		health = max_health
+		#if !immortal: die()
+		#else:         health = 0
 
 func die():
 	healthbar.hide()
@@ -242,22 +247,28 @@ func play_animation(anim_name):
 
 var frame_velocity = Vector2(0,0)
 func _integrate_forces(_state):
-	frame_velocity = Vector2.ZERO
-	if Input.is_action_pressed("move_down"):
-		frame_velocity.y += 1
-	if Input.is_action_pressed("move_up"):
-		frame_velocity.y -= 1
-	if Input.is_action_pressed("move_right"):
-		frame_velocity.x += 1
-	if Input.is_action_pressed("move_left"):
-		frame_velocity.x -= 1
-	
-	apply_central_force(frame_velocity.normalized()*speed)
+	if teleporting_player:
+		teleporting_player = false
+		global_position = teleport_destination
+		linear_velocity = Vector2.ZERO
+	else:
+		frame_velocity = Vector2.ZERO
+		if can_move:
+			if Input.is_action_pressed("move_down"):
+				frame_velocity.y += 1
+			if Input.is_action_pressed("move_up"):
+				frame_velocity.y -= 1
+			if Input.is_action_pressed("move_right"):
+				frame_velocity.x += 1
+			if Input.is_action_pressed("move_left"):
+				frame_velocity.x -= 1
+			
+			apply_central_force(frame_velocity.normalized()*speed)
 
 func shoot():
 	can_shoot = false
 	var i_bullet = normal_bullet.instantiate()
-	world_center.add_child(i_bullet)
+	bullet_holder.add_child(i_bullet)
 	i_bullet.global_position = firepoint.global_position
 	var dir:Vector2 = (firepoint.global_position - global_position).normalized()
 	i_bullet.set_velocity(bullet_velocity*dir)
@@ -313,7 +324,7 @@ func charge_laser(charge_t):
 func fire_laser():
 	var laser_duration = duration + duration_increase*(parry_charges-5)
 	laser_cast.fire(laser_duration)
-	VfxManager.frame_freeze(0.5,laser_duration+1,true)
+	VfxManager.frame_freeze(0.5,laser_duration+1)
 	parry_charges = 0
 
 func dash():

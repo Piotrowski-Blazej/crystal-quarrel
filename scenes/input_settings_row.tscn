@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8o7d577dc3ym"]
+
+[ext_resource type="Script" uid="uid://b3qg6htkfjama" path="res://scripts/input_settings_row.gd" id="1_e6nqn"]
+[ext_resource type="LabelSettings" uid="uid://bi7ww3dqurkv1" path="res://resources/labelsettings/play.tres" id="2_u0kd0"]
+
+[node name="InputSettingsRow" type="HBoxContainer"]
+modulate = Color(1, 0.49803922, 0.49803922, 1)
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+mouse_filter = 0
+alignment = 1
+script = ExtResource("1_e6nqn")
+
+[node name="InputName" type="Label" parent="."]
+layout_mode = 2
+text = "Move Up - "
+label_settings = ExtResource("2_u0kd0")
+
+[node name="InputButton" type="Label" parent="."]
+layout_mode = 2
+label_settings = ExtResource("2_u0kd0")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

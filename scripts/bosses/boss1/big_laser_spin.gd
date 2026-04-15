@@ -18,6 +18,9 @@ var rotate = false
 
 func _ready() -> void:
 	match GlobalValues.difficulty:
+		3:
+			charge_time = 3
+			attack_duration = 7.5
 		0:
 			charge_time = 2.5
 			attack_duration = 6.5
@@ -53,6 +56,7 @@ func enter():
 	
 	laser.warn()
 	circle.enabled = false
+	laser_charge_vfx.lifetime = charge_time
 	laser_charge_vfx.emitting = true
 	rotate = false
 	

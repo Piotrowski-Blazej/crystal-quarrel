@@ -1070,6 +1070,7 @@ bus = &"SFX"
 [connection signal="enter_phase_2" from="." to="StateMachine/Boss2Dash" method="_on_boss_2_enter_phase_2"]
 [connection signal="enter_phase_2" from="." to="StateMachine/HomingBulletHell" method="_on_boss_2_enter_phase_2"]
 [connection signal="enter_phase_2" from="." to="StateMachine/HomingFastball" method="_on_boss_2_enter_phase_2"]
+[connection signal="enter_phase_2" from="." to="StateMachine/QuickMissiles" method="_on_boss_2_enter_phase_2"]
 [connection signal="enter_phase_3" from="." to="StateMachine/QuickMissiles" method="_on_boss_2_enter_phase_3"]
 [connection signal="enter_phase_3" from="." to="StateMachine/QuickCuts" method="_on_boss_2_enter_phase_3"]
 [connection signal="body_entered" from="Heptagon/HugeLaser" to="Heptagon/HugeLaser" method="_on_body_entered"]

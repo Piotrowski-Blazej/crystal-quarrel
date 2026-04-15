@@ -50,7 +50,7 @@ voice/4/pan = 0.25
 
 [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_n8wo2"]
 resource_name = "Reverb"
-room_size = 0.2
+room_size = 0.1
 damping = 0.0
 spread = 0.0
 
@@ -93,11 +93,11 @@ bus/4/volume_db = 0.0
 bus/4/send = &"SFX"
 bus/4/effect/0/effect = SubResource("AudioEffectChorus_j3pel")
 bus/4/effect/0/enabled = true
-bus/5/name = &"New Bus"
+bus/5/name = &"Reverb"
 bus/5/solo = false
 bus/5/mute = false
 bus/5/bypass_fx = false
 bus/5/volume_db = 0.0
-bus/5/send = &"Master"
+bus/5/send = &"SFX"
 bus/5/effect/0/effect = SubResource("AudioEffectReverb_n8wo2")
 bus/5/effect/0/enabled = true

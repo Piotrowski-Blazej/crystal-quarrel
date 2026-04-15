@@ -63,7 +63,4 @@ func _on_save_button_pressed() -> void:
 
 
 func exit():
-	GlobalValues.time_elapsed = 0.0
-	GlobalValues.damage_taken = 0
-	GlobalValues.hits_parried = 0
 	fadeout_rect.fade_out(0.5)

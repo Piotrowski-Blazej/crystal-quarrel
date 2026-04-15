@@ -12,6 +12,7 @@ func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
 	if GlobalValues.difficulty == 1: laser_warn_time = 0.6
 	elif GlobalValues.difficulty == 0: laser_warn_time = 0.75
+	elif GlobalValues.difficulty == 3: laser_warn_time = 1
 
 func enter():
 	barrier_anim.speed_scale = 0.4

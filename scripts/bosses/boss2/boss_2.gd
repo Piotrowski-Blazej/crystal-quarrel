@@ -2,6 +2,7 @@ extends Area2D
 
 var health = 8000
 var crack_thresholds = [6000,4000,2000,0]
+var waiting_for_fastball_attack:bool = false
 var phase_2_threshold = 4000
 var in_phase_2 = false
 var in_phase_3 = false
@@ -57,6 +58,10 @@ func _ready() -> void:
 	bossbar = get_tree().get_first_node_in_group("bossbar")
 	world_center = get_tree().get_first_node_in_group("world_center")
 	state_machine.setup()
+	
+	if GlobalValues.difficulty == 3 or GlobalValues.difficulty == 0:
+		health = 6000
+		crack_thresholds = [4500,3000,1500,0]
 	
 	bossbar.max_value = health
 	bossbar.value = health
@@ -136,6 +141,18 @@ func spawn_fire_area(r_scale:float, r_lifetime:float):
 	i_area.global_position = self.global_position
 	i_area.setup(r_scale, r_lifetime)
 
+func superdash_hit(damage, r_kb, hit_position:Vector2, strong_attack = false):
+	player.apply_central_impulse(global_position.direction_to(player.global_position)*player.superdash_kb*0.1)
+	if dashing_at_player:
+		hit(damage*1.5, r_kb/2, strong_attack)
+		
+		VfxManager.spawn_enemy_particles(hit_position, Color.RED, "medium_spray", HEPTAGON, Vector2(0.5,1))
+		VfxManager.frame_freeze(0.05,0.5)
+	else:
+		VfxManager.spawn_enemy_particles(hit_position, Color.RED, "light_spray", HEPTAGON, Vector2(0.3,0.5))
+		VfxManager.frame_freeze(0.2,0.3)
+		hit(damage, r_kb, strong_attack)
+
 func hit(damage,_r_kb,strong_attack = false):
 	health -= damage
 	
@@ -150,13 +167,8 @@ func hit(damage,_r_kb,strong_attack = false):
 		crack_thresholds.pop_front()
 		if health > 0:
 				barrier.setup()
-				main_animation_player.speed_scale = 1
-				if state_machine.current_state == $StateMachine/QuickCuts:
-					main_animation_player.play_backwards("fly_up")
-					await main_animation_player.animation_finished
-				state_machine.on_child_transition(state_machine.current_state, "homingfastball")
-				$FireAreaParticles.emitting = false
-	if health <= 0 && strong_attack && !in_phase_3 && GlobalValues.difficulty != 0:
+				waiting_for_fastball_attack = true
+	if health <= 0 && strong_attack && !in_phase_3 && GlobalValues.difficulty != 0 and GlobalValues.difficulty != 3:
 		barrier.setup(5,true)
 		in_phase_3 = true
 		
@@ -175,7 +187,7 @@ func hit(damage,_r_kb,strong_attack = false):
 		set_collision_layer_value(4, false)
 		set_collision_mask_value(2, false)
 	
-	if strong_attack && health <= 0 && GlobalValues.difficulty == 0:
+	if strong_attack && health <= 0 && (GlobalValues.difficulty == 0 or GlobalValues.difficulty == 3):
 		GlobalValues.camera.screen_shake(20,6)
 		state_machine.halt_all_states()
 		main_animation_player.speed_scale = 1
