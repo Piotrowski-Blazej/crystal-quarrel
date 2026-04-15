@@ -9,7 +9,7 @@ extends State
 var homing_shooting_c = 1
 const homing_bullet_damage = 10
 var homing_bullet_velocity = 30
-const homing_bullet_accel:float = 2.5
+var homing_bullet_accel:float = 2.5
 var homing_bullet_kb = 100
 const homing_parry_chance = 50
 var homing_bullet_lifetime = 1.2
@@ -24,6 +24,7 @@ func _ready() -> void:
 		homing_shooting_c = 1.8
 		homing_bullet_velocity = 20
 		homing_bullet_kb = 10
+		homing_bullet_accel = 1.25
 	elif GlobalValues.difficulty == 0:
 		homing_bullet_lifetime = 1.6
 		homing_shooting_c = 1.4

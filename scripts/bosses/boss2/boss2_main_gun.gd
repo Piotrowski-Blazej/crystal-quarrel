@@ -73,7 +73,7 @@ func fire_missile(warning:Sprite2D ,r_damage = bullet_damage, r_velocity = bulle
 		can_parry = true
 	
 	i_bullet.setup(warning, r_damage, r_knockback, velocity, accel, color, target, can_parry, r_scale, r_e_scale, origin, strong)
-	play_sfx(0)
+	play_sfx(1)
 
 @onready var shot_sfx: AudioStreamPlayer2D = $ShotSfx
 @onready var shot_sfx_loud: AudioStreamPlayer2D = $ShotSfxLoud

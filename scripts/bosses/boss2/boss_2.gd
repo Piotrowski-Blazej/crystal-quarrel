@@ -37,7 +37,6 @@ var world_center:Node2D
 var player:RigidBody2D
 var bossbar:ProgressBar
 
-
 @onready var thruster_particles: CPUParticles2D = $ThrusterParticles
 @onready var fading_sprite_c: Timer = $Timers/FadingSpriteC
 @onready var dash_d: Timer = $Timers/DashD

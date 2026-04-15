@@ -19,6 +19,9 @@ const CIRCLE_WARNING = preload("uid://bsuiardtyixtn")
 var player:RigidBody2D
 var world_center:Node2D
 
+var wait_time = 0.5
+var barrier_anim_speed = 0.27
+
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
 	world_center = get_tree().get_first_node_in_group("world_center")
@@ -26,19 +29,23 @@ func _ready() -> void:
 	match GlobalValues.difficulty:
 		3:
 			missile_travel_time = 2.5
+			wait_time = 1.5
 		0:
 			missile_travel_time = 1.5
 		1:
 			missile_travel_time = 1.3
+		2:
+			barrier_anim_speed = 0.5
 
-const WAIT_TIME = 1
+
 
 func enter():
-	animation_player.speed_scale = 0.27
+	animation_player.speed_scale = barrier_anim_speed
 	animation_player.play("rotate_barriers")
 	
 	fire()
-	await get_tree().create_timer(WAIT_TIME+missile_travel_time+0.5).timeout
+	await get_tree().create_timer(wait_time).timeout
+	await animation_player.animation_finished
 	finish()
 
 const dist:int = 800
