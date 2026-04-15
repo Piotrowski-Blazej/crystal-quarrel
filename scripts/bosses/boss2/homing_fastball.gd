@@ -20,9 +20,9 @@ var can_shoot = false
 
 func _ready() -> void:
 	if GlobalValues.difficulty == 3:
-		homing_bullet_lifetime = 2.2
+		homing_bullet_lifetime = 1.6
 		homing_shooting_c = 1.8
-		homing_bullet_velocity = 15
+		homing_bullet_velocity = 20
 		homing_bullet_kb = 10
 	elif GlobalValues.difficulty == 0:
 		homing_bullet_lifetime = 1.6

@@ -27,7 +27,7 @@ var fire_area_scale = 5
 func _ready() -> void:
 	if GlobalValues.difficulty == 3:
 		turn_time = 2.3
-		fire_area_scale = 3
+		fire_area_scale = 4
 		turn_amount_range = Vector2i(2,3)
 	elif GlobalValues.difficulty == 0:
 		turn_time = 1.7
